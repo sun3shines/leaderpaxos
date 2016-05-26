@@ -1,0 +1,150 @@
+一旦副本分布与机器无关,数据丢失后的恢复效率将非常高。这是因为,一旦某台机器的数据
+丢失,其上数据段的副本将分布在整个集群的所有机器中,而不是仅在几个副本机器中,从而可以
+从整个集群同时拷贝恢复数据,而集群中每台数据源机器都可以以非常低的资源做拷贝
+
+把几个副本服务器之间的同步，放大到整个集群中来了。
+
+强一致性，弱一致性，单调一致性，会话一致性，最终一致性等。
+
+存储策略。以及paxos算法？是怎么回事？论文里没有说了。应该是
+会话一致性。这个不错。需要序号和序号和服务端交互了。
+
+centralized 中心化副本控制协议
+去中心化(decentralized)
+副本控制协议
+
+第一、由于数据的更新流程都是由 primary 控制的,primary
+副本上的数据一定是最新的,所以
+如果始终只读 primary 副本的数据,可以实现强一致性。如果只读 primary 副本,则
+secondary 副本
+将不提供读服务。实践中,如果副本不与机器绑定,而是按照数据段为单位维护副本,仅有
+primary
+副本提供读服务在很多场景下并不会造出机器资源浪费。回忆 2.1.5
+节,将数据分为数据段,以数
+据段为副本的基本单位,将副本分散到集群中个,假设 primary
+也是随机的确定的,那么每台机器
+上都有一些数据的 primary 副本,也有另一些数据段的 secondary
+副本。从而某台服务器实际都提供
+读写服务。
+
+
+还是把单台服务器的数据，平均分散到了整个集群中了。是的。
+
+Quorum 机制和lease机制。确定primary
+
+中心化副本控制协议，简单，但是有停服的风险。会造成较大的损失。
+
+去中心化协议 没有停服了。是的。
+
+然而,没有什么事情是完美的,去中心化协议的最大的缺点是协议过程通常比较复杂。尤其当
+去中心化协议需要实现强一致性时,协议流程变得复杂且不容易理解。由于流程的复杂,去中心化
+协议的效率或者性能一般也较中心化协议低。一个不恰当的比方就是,中心化副本控制协议类似专
+制制度,系统效率高但高度依赖于中心节点,一旦中心节点异常,系统受到的影响较大;去中心化
+副本控制协议类似民主制度,节点集体协商,效率低下,但个别节点的异常不会对系统总体造成太
+大影响。
+
+所以，我们的集群，就是要选择中心方式了。不要民主了。民主适应不了我们的方式了。是的。
+
+Primary-secondary 型副
+本控制虽然简单,但使用却极其广泛。
+
+和paxos都来一遍吧。hacenter，就是中心化了。是的。实现了多个模型了？应该是的。顺便也把swift的强一致性也给统一了。是的。
+
+Chubby[13]和 Zookeeper 使用了基于 Paxos 的去中心化协议选出 primary 节点,但完成
+primary
+节点的选举后,这两个系统都转为中心化的副本控制协议,即由 primary
+节点负责同步更新操作到
+secondary 节点。本文在 2.8.6 中进一步分析这三个系统的工作原理。
+
+虽然都使用了 Paxos 协议,但与 Chubby 和 Zookeeper 不同的是,Megastore
+中每次数据更新操
+作都基于一个改进的 Paxos 协议的实例,而不是利用 paxos 协议先选出 primary
+后,再转为中心化的
+primary-secondary 方式[12]。另一方面,Megastore 又结合了 Primary-secondary
+本文在 2.8.6 中进一
+步分析 Megastore 使用 paxos 的工作原理。
+
+编程中的鲁棒性。？？
+
+由中心节点向其他节点发送 lease,
+若某个节点持有有效的 lease,
+则认为该节点正常可以提供服
+务。
+用于例 2.3.1 中,
+节点 A、 C 依然周期性的发送 heart beat 报告自身状态,
+B、
+节点 Q 收到 heart beat
+后发送一个 lease,表示节点 Q 确认了节点 A、B、C 的状态,并允许节点在 lease
+有效期内正常工
+作。节点 Q 可以给 primary 节点一个特殊的 lease,表示节点可以作为 primary
+工作。一旦节点 Q 希
+望切换新的 primary,则只需等前一个 primary 的 lease 过期,则就可以安全的颁发新的
+lease 给新的
+primary 节点,而不会出现“双主”问题。
+
+有效期，很重要，而且要求时钟同步了。是的。如何设置时钟？是个问题了。是的。
+
+在实际系统中,
+若用一个中心节点发送 lease 也有很大的风险,
+一旦该中心节点宕机或网络异常,
+则所有的节点没有
+lease,从而造成系统高度不可用。为此,实际系统总是使用多个中心节点互为副
+本,成为一个小的集群,该小集群具有高可用性,对外提供颁发 lease 的功能。chubby 和
+zookeeper
+都是基于这样的设计。
+
+这个不错。是的。
+
+是我们实现的目标了。是的。
+
+master primary secondary
+
+因为有效期的存在，所以大家非常的默契了。颁发者和被颁发者之间的默契，和承诺了。是的。很好。
+
+我们知道 chubby 通过 paxos 协议实现去中心化的选择 primary 节点(见 2.8.6 )
+。一旦某个节点
+获得了超过半数的节点认可,该节点成为 primary 节点,其余节点成为 secondary
+节点。Secondary
+节点向 primary 节点发送 lease, lease 的含义是:承诺在 lease 时间内,
+该
+“
+不选举其他节点成为 primary
+节点”
+。只要 primary 节点持有超过半数节点的 lease,那么剩余的节点就不能选举出新的
+primary。
+
+读到31了。是的。
+
+lease + paxos 协议。是的，爽。要的就是这个感觉了。是的。
+
+借助 zookeeper,我们可以简单的实现高效的、无单点选主、状态
+监控、分布式锁、分布式消息队列等功能,而实际上,这些功能的实现都是依赖于背后
+zookeeper
+与 client 之间的 Lease 的。
+
+决定挨个来一遍。是的。
+
+Quorum 机制 + lease +paxos
+
+MULTIPAXOS three-phase commit protocol
+
+clock synchronization problem  a failure detector and a leader elector
+
+I=O automaton models  MMTA 3 model .GTA model
+
+component automata 
+
+performs a step involving action 
+
+Failure detector and leader elector
+
+use DETECTOR (‘; ‘) i automaton to check for the set of alive processes.
+
+
+http://oceanbase.org.cn
+http://www.360doc.com/content/12/0408/15/17708_201930641.shtml
+http://blog.csdn.net/chen77716/article/details/6170235
+
+http://blog.csdn.net/anderscloud/article/details/7246928
+
+http://blog.csdn.net/chen77716/article/details/7297122

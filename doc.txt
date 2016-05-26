@@ -1,0 +1,26 @@
+
+实现lease 机制 选择leader
+
+实现单值paxos 
+
+实现多值 paxos
+
+实现rnd编号
+
+实现instance 编号
+
+实现fast paxos 。proposal，与paxos学习 恢复机制分离了。
+
+paxos 重点在于学习了。是的。把proposal 分离出来，成为状态机了。
+
+实现分布式配置了。是的。 把学习和使用分离开了。
+
+实现业务切换了？leader的选举了。然后使用高可用，作为配置服务了？
+
+实现分布式锁了。是的。
+
+log序列化多value存储。并在其基础上实现了分布式锁，内存key-val存储，以及配置高可用服务了。
+
+内存log的精简变形。经过一系列的set，update，del操作后，导致日志量增加。可以直接转化为了set的方式了。
+
+
