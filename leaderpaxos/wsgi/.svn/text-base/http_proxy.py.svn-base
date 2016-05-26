@@ -1,6 +1,6 @@
 
 import json
-from smallwsgi.http import jresponse
+from leaderpaxos.wsgi.http import jresponse
 
 def doProxyPut(request):
     

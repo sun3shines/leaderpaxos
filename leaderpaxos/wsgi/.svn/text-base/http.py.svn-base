@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-from webob import Request,Response
+from leaderpaxos.webobx import Request,Response
 
 def jresponse(status,msg,req,status_int,headers=None,statusstr='',param=None):
     

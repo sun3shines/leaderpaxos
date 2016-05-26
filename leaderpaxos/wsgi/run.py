@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import smallwsgi.static
-from smallwsgi.wsgi import run_wsgi
+import leaderpaxos.wsgi.static
+from leaderpaxos.wsgi.wsgi import run_wsgi
 
 def start():
 
-    print smallwsgi.static.PROC_HOST,smallwsgi.static.PROC_PORT
+    print leaderpaxos.wsgi.static.PROC_HOST,leaderpaxos.wsgi.static.PROC_PORT
     
-    run_wsgi(smallwsgi.static.PROC_PASTE_CONF, 
-             smallwsgi.static.PROC_PASTE_APP_SECTION, 
-             smallwsgi.static.PROC_HOST,
-             smallwsgi.static.PROC_PORT)
+    run_wsgi(leaderpaxos.wsgi.static.PROC_PASTE_CONF, 
+             leaderpaxos.wsgi.static.PROC_PASTE_APP_SECTION, 
+             leaderpaxos.wsgi.static.PROC_HOST,
+             leaderpaxos.wsgi.static.PROC_PORT)
     
 if __name__ == '__main__':
     start()

@@ -17,7 +17,7 @@ import eventlet
 from eventlet import greenio, GreenPool, sleep, wsgi, listen
 from paste.deploy import loadapp, appconfig
 from eventlet.green import socket, ssl
-from webob import Request
+from leaderpaxos.webobx import Request
 from urllib import unquote
 import syslog
 

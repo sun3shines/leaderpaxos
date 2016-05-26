@@ -3,8 +3,8 @@
 from __future__ import with_statement
 
 from eventlet import Timeout
-from webob import Request, Response
-from smallwsgi.route import process_request
+from leaderpaxos.webobx import Request, Response
+from leaderpaxos.wsgi.route import process_request
     
 class ServerController(object):
 

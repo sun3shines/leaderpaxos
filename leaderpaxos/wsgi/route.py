@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from smallwsgi.http import jresponse
-from smallwsgi.urls import strProxyGet,strProxyPut
-from smallwsgi.http_proxy import doProxyGet,doProxyPut
+from leaderpaxos.wsgi.http import jresponse
+from leaderpaxos.wsgi.urls import strProxyGet,strProxyPut
+from leaderpaxos.wsgi.http_proxy import doProxyGet,doProxyPut
 
 url2view = {}
 
