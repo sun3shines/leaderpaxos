@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from leaderpaxos.wsgi.http import jresponse
-from leaderpaxos.wsgi.urls import strProxyGet,strProxyPut
-from leaderpaxos.wsgi.http_proxy import doProxyGet,doProxyPut
+from leaderpaxos.httpserver.core.http import jresponse
+from leaderpaxos.share.urls import strTest
+from leaderpaxos.httpserver.http_server import doTest
 
 url2view = {}
 
-url2view.update({strProxyPut:doProxyPut})
-
-url2view.update({strProxyGet:doProxyGet})
+url2view.update({strTest:doTest})
 
 def process_request(request):
     
