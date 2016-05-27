@@ -66,3 +66,5 @@ def loadUuid():
     with open(HOST_PATH,'r') as f:
         return f.read()
 
+if __name__ == '__main__':
+    print get_vs_uuid()
