@@ -8,6 +8,3 @@ def start():
     run_wsgi(wsgiObj.WSGI_CONF, wsgiObj.WSGI_SECT, 
              wsgiObj.WSGI_HOST,wsgiObj.WSGI_PORT)
     
-if __name__ == '__main__':
-    start()
-    

@@ -13,10 +13,11 @@ class MyTest(Task):
         return strTest
 
 
-def get_test():
+def get_test(host,port):
     
     t = MyTest()
-    mission.execute(t, wsgiObj.WSGI_HOST, wsgiObj.WSGI_PORT,5)
+    mission.execute(t, host,port,5)
+    print t.response
 
 if __name__ == '__main__':
-    get_test()
+    get_test('127.0.0.1',10011)
