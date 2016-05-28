@@ -1,7 +1,6 @@
 
 import os
 import os.path
-from leaderpaxos.httpserver.core.run import start
 from leaderpaxos.httpserver.core.static import wsgiObj
 
 def iduuid(hostuuid=None,host=None,port=None,hosts=[]):
@@ -13,7 +12,7 @@ def iduuid(hostuuid=None,host=None,port=None,hosts=[]):
     def __deco(func):
         def _deco(*args,**kwargs):
             func(args,kwargs)
-  	return _deco	          	
+        return _deco	          	
     return __deco
 
 def load():

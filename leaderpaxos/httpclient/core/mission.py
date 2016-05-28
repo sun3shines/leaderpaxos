@@ -69,8 +69,11 @@ class Mission:
                     msg = json.loads(t.data)
                     if type([]) == type(msg):
                         t.response = {'status':'0','msg':msg}
-                    elif type({}) == type(msg) and msg.has_key('status'):
-                        t.response = json.loads(t.data)
+                    elif type({}) == type(msg): 
+                        if msg.has_key('status'):
+                            t.response = json.loads(t.data)
+                        else:
+                            t.response = {'status':'0','msg':msg}
                     else:
                         t.response = {'status':'0','msg':t.data} 
                 except:
