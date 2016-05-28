@@ -1,7 +1,7 @@
 
 import json
-from leaderpaxos.httpserver.core.http import jresponse
-from leaderpaxos.httpserver.core.static import wsgiObj
+from leaderpaxos.share.http import jresponse
+from leaderpaxos.httpserver.static import wsgiObj
 def doTest(request):
 
 	return jresponse('0','test ok',request,200)

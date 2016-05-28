@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from leaderpaxos.httpserver.core.http import jresponse
+from leaderpaxos.share.http import jresponse
 from leaderpaxos.share.urls import strTest,strAlive
 from leaderpaxos.httpserver.http_server import doTest,do_paxos_alive
 

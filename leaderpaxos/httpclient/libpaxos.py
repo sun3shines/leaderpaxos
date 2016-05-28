@@ -14,7 +14,7 @@ class Alive(Task):
 def paxos_alive(host,port):
     t = Alive()
     mission.execute(t, host, port, 5)
-    print t.response
+    return t.response
 
 def test():
     pass

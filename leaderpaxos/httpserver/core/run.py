@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from leaderpaxos.httpserver.core.static import wsgiObj
+import traceback
+from leaderpaxos.httpserver.static import wsgiObj
 from leaderpaxos.httpserver.core.wsgi import run_wsgi
 
 def start():
-
-    run_wsgi(wsgiObj.WSGI_CONF, wsgiObj.WSGI_SECT, 
-             wsgiObj.WSGI_HOST,wsgiObj.WSGI_PORT)
-    
+    wsgiObj.interruptEvent.clear()
+    try:
+        run_wsgi(wsgiObj.WSGI_CONF, wsgiObj.WSGI_SECT, 
+                 wsgiObj.WSGI_HOST,wsgiObj.WSGI_PORT)
+    except:
+        print traceback.format_exc()
+        wsgiObj.interruptEvent.set()
+        
