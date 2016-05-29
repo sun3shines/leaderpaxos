@@ -3,7 +3,7 @@
 import os
 import time
 
-from leaderpaxos.httpserver.static import wsgiObj,SLEEP_INTERVAL
+from leaderpaxos.proposer.httpserver.static import wsgiObj,SLEEP_INTERVAL
 
 def signal_handler():
     if wsgiObj.interruptEvent.isSet():  

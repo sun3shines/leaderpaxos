@@ -1,6 +1,6 @@
 
 from leaderpaxos.proc.p import load,iduuid
-from leaderpaxos.httpserver.core.run import start
+from leaderpaxos.proposer.httpserver.core.run import start
 
 paxos_hosts = [('nSwfsePF-0GHDbc-KJcV','127.0.0.1',10011)]
 

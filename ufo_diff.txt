@@ -148,3 +148,12 @@ http://blog.csdn.net/chen77716/article/details/6170235
 http://blog.csdn.net/anderscloud/article/details/7246928
 
 http://blog.csdn.net/chen77716/article/details/7297122
+
+下一步研究，proposer学习，acceptor启动和学习。
+学习什么？学习leader是谁?
+
+重启后，会立即学习，设置值后，会进行广播了。提议之前需要进行学习了。是的。并且检查前后序了。
+
+下一步，来研究acceptor进程了。
+accetpor的wsgi服务。照抄一遍 proposer的。
+

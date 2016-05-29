@@ -2,7 +2,7 @@
 
 from leaderpaxos.httpclient.libpaxos import paxos_alive
 from leaderpaxos.share.http import http_success
-from leaderpaxos.httpserver.static import wsgiObj
+from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.signal import signal_sleep
 
 def paxos_state(host,port,hostUuid):

@@ -1,2 +1,3 @@
 [paste.app_factory]
-server = leaderpaxos.httpserver.core.server:app_factory
+server = leaderpaxos.proposer.httpserver.core.server:app_factory
+acceptor = leaderpaxos.acceptor.httpserver.core.server:app_factory

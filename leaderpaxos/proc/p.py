@@ -1,7 +1,7 @@
 
 import os
 import os.path
-from leaderpaxos.httpserver.static import wsgiObj
+from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state
 def iduuid(hostuuid=None,host=None,port=None,hosts=[]):
     wsgiObj.hostUuid = hostuuid
