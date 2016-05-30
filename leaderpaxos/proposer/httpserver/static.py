@@ -7,6 +7,7 @@ SLEEP_INTERVAL = 1
 
 class pywsgi:
     def __init__(self):
+        
         self.WSGI_CONF = '/usr/lib/python2.6/site-packages/leaderpaxos/proposer/httpserver/core/paste.conf' 
         self.WSGI_SECT = 'server' 
         self.WSGI_HOST = None 
@@ -25,4 +26,10 @@ class pywsgi:
         self.CACHE_SEND = Mydict()
         self.CACHE_RECV = Mydict()
         
+        self.PAXOS_IDENTITY = None
+        
+        self.MAIN_LEARN_RECV = Queue.Queue()
+        
+        self.PAXOS_LEADER_TERM = 20
+         
 wsgiObj = pywsgi()

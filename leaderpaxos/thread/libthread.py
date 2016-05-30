@@ -1,6 +1,6 @@
 
 import threading
-from leaderpaxos.thread.paxos import paxos_state,display_state
+from leaderpaxos.thread.proposer import paxos_state,display_state
 
 class do_paxos_get_state(threading.Thread):
     def __init__(self,hostUuid=None,host=None,port=None):

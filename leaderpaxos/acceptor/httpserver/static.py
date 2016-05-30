@@ -16,4 +16,6 @@ class pywsgi:
         self.PAXOS_VALUE = Mydict()
         self.interruptEvent = threading.Event()
         
+        self.PAXOS_LEADER_TERM = 20
+        
 wsgiObj = pywsgi()
