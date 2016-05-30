@@ -6,6 +6,9 @@ from leaderpaxos.share.cache.lockdict import Mydict
 
 SLEEP_INTERVAL = 1
 
+def timer_func():
+    wsgiObj.LEADER_TIMER = threading.Timer(wsgiObj.PAXOS_LEADER_TERM**5,timer_func)
+
 class pywsgi:
     def __init__(self):
         
@@ -35,5 +38,10 @@ class pywsgi:
          
         self.broadUuid = None
         self.leaderUuid = None
+        
+        self.PAXOS_TRY_TERM = 2
+        
+        self.LEADER_TIMER = threading.Timer(self.PAXOS_LEADER_TERM**5,timer_func)
+        self.paxos_leader_default = ('',0,'')
         
 wsgiObj = pywsgi()

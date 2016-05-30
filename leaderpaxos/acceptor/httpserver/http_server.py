@@ -5,8 +5,7 @@ import time
 import threading
 from leaderpaxos.share.http import jresponse
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
-from leaderpaxos.share.urls import learn_paxos_leader,teach_paxos_leader,\
-    broad_paxos_leader
+from leaderpaxos.share.urls import learn_paxos_leader,broad_paxos_leader
 from leaderpaxos.thread.libtimer import paxos_timer_acceptor
 
 def doTest(request):
@@ -18,9 +17,9 @@ def do_paxos_learn(request):
     param = json.loads(request.body)
     learn_item = param.get('learn_item')
     if learn_item == learn_paxos_leader:
-        leaderUuid,leaderTime,broadUuid = wsgiObj.PAXOS_VALUE.get(learn_paxos_leader, ('',0,''))
+        leaderUuid,leaderTime,broadUuid = wsgiObj.PAXOS_VALUE.get(learn_paxos_leader, wsgiObj.paxos_leader_default)
         if not leaderUuid:
-            msgval = json.dumps(('',0,0))
+            msgval = json.dumps(wsgiObj.paxos_leader_default)
         else:
             leaderTerm = wsgiObj.PAXOS_LEADER_TERM - (time.time()-leaderTime)
             msgval = json.dumps((leaderUuid,leaderTerm,broadUuid))

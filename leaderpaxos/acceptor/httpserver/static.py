@@ -25,4 +25,6 @@ class pywsgi:
         
         self.broadUuid = None
         
+        self.paxos_leader_default = ('',0,'')
+        
 wsgiObj = pywsgi()

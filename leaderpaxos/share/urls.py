@@ -3,6 +3,8 @@ strTest = '/test'
 strAlive = '/paxos/alive'
 strLearn = '/paxos/learn'
 strTeach = '/paxos/teach'
+strBroad = '/paxos/broad'
+
 
 learn_paxos_leader = 'pull_paxos_leader'
 
