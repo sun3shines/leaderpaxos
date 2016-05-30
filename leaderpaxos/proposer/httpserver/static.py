@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import Queue
 import threading
@@ -32,4 +33,7 @@ class pywsgi:
         
         self.PAXOS_LEADER_TERM = 20
          
+        self.broadUuid = None
+        self.leaderUuid = None
+        
 wsgiObj = pywsgi()

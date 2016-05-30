@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from leaderpaxos.httpclient.core.task import Task
 import leaderpaxos.httpclient.core.mission as mission 

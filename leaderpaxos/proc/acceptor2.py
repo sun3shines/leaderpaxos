@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from leaderpaxos.proc.pa import acceptor_iduuid
 from leaderpaxos.acceptor.httpserver.core.run import start

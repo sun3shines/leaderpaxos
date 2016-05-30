@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import threading
 from leaderpaxos.thread.proposer import paxos_state,display_state

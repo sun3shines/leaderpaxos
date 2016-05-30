@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from leaderpaxos.proc.pp import proposer_load,proposer_iduuid
 from leaderpaxos.proposer.httpserver.core.run import start

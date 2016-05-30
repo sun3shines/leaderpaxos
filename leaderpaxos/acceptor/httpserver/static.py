@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
 
 import threading
 from leaderpaxos.share.cache.lockdict import Mydict
 
 SLEEP_INTERVAL = 1
+
+def timer_func():
+    wsgiObj.PAXOS_TIMER = threading.Timer(wsgiObj.PAXOS_LEADER_TERM**5,timer_func)
 
 class pywsgi:
     def __init__(self):
@@ -17,5 +21,8 @@ class pywsgi:
         self.interruptEvent = threading.Event()
         
         self.PAXOS_LEADER_TERM = 20
+        self.PAXOS_TIMER = threading.Timer(self.PAXOS_LEADER_TERM**5,timer_func)
+        
+        self.broadUuid = None
         
 wsgiObj = pywsgi()

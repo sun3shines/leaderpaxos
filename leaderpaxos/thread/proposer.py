@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import time
 import json
@@ -5,7 +6,8 @@ from leaderpaxos.httpclient.libpaxos import paxos_alive
 from leaderpaxos.share.http import http_success
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.signal import signal_sleep
-from leaderpaxos.share.urls import learn_paxos_leader,identity_leader,identity_proposer
+from leaderpaxos.share.urls import learn_paxos_leader,identity_leader,identity_proposer,\
+    broad_paxos_leader
 from leaderpaxos.httpclient.libpaxos import paxos_learn
 
 def paxos_state(host,port,hostUuid):
@@ -42,44 +44,50 @@ def paxos_communicate(acceptorUuid,host,port):
             resp = paxos_learn(host, port, learn_paxos_leader)
             if http_success(resp):
                 msgval = json.loads(resp.get('msg'))
-                leaderUuid,leaderTerm = tuple(msgval)
+                leaderUuid,leaderTerm,broadUuid = tuple(msgval)
                 wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':learn_paxos_leader,
-                                                 'val':(leaderUuid,leaderTerm)})
+                                                 'val':(leaderUuid,leaderTerm,broadUuid)})
             else:
                 wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':learn_paxos_leader,
-                                                 'val':('failed',0)})
+                                                 'val':('failed',0,'')})
             wsgiObj.SIGNAL_RECV.put(acceptorUuid)
             
+        elif broad_paxos_leader == item:
+            pass
+        
         else:
             pass
         
 def paxos_decision():
     
     resp_learn_leader = []
-    resp_teach_leader = []
+    resp_broad_leader = []
     
     while True:
         acceptorUuid = wsgiObj.SIGNAL_RECV.get()
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
         item = param.get('item')
         val = param.get('val')
-        leaderUuid,leaderTerm = val
+        leaderUuid,leaderTerm,broadUuid = val
         
         if learn_paxos_leader == item:
-            resp_learn_leader.append((acceptorUuid,leaderUuid,leaderTerm))
-            learn_leader_data = ('',0)
+            resp_learn_leader.append((acceptorUuid,leaderUuid,leaderTerm,broadUuid))
             if len(resp_learn_leader) == len(wsgiObj.PAXOS_ACCEPTORS):
-                for acceptorUuid,leaderUuid,leaderTerm in resp_learn_leader:
+                learn_leader_data = ('',0,'')
+                for acceptorUuid,leaderUuid,leaderTerm,broadUuid in resp_learn_leader:
                     if not leaderUuid or 'failed' == leaderUuid:
                         continue
                     print 'learn leader %s %s from acceptor %s ' % (leaderUuid,leaderTerm,acceptorUuid)
-                    learn_leader_data = (leaderUuid,leaderTerm)
+                    learn_leader_data = (leaderUuid,leaderTerm,broadUuid)
+                    break
+                
                 wsgiObj.MAIN_LEARN_RECV.put(learn_leader_data)
+                
         else:       
             pass
         
 def paxos_proposer_main():
-    
+        
     wsgiObj.PAXOS_IDENTITY = identity_proposer
     
     while True:
@@ -88,13 +96,14 @@ def paxos_proposer_main():
                                              'val':None})
             wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)
             
-        leaderUuid,leaderTerm = wsgiObj.MAIN_LEARN_RECV.get()
-            
+        leaderUuid,leaderTerm,broadUuid = wsgiObj.MAIN_LEARN_RECV.get()
+        # 此处涉及到leader的重启了，如果是在任期内重启？和在任期外重启呢？ 
         if not leaderUuid:
             print 'data is none,prepare to proposal'
-            import pdb;pdb.set_trace()
         else:
             print 'the leader is %s, sleep time %s' % (leaderUuid,leaderTerm)
+            wsgiObj.leaderUuid = leaderUuid
+            wsgiObj.broadUuid = broadUuid
             signal_sleep(leaderTerm)
-        
+            
     
