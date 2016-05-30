@@ -4,7 +4,7 @@ from __future__ import with_statement
 
 from eventlet import Timeout
 from leaderpaxos.webobx import Request, Response
-from leaderpaxos.accptor.httpserver.route import process_request
+from leaderpaxos.acceptor.httpserver.route import process_request
     
 class ServerController(object):
 

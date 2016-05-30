@@ -1,4 +1,5 @@
 
+import Queue
 import threading
 from leaderpaxos.share.cache.lockdict import Mydict
 
@@ -10,9 +11,18 @@ class pywsgi:
         self.WSGI_SECT = 'server' 
         self.WSGI_HOST = None 
         self.WSGI_PORT = None 
-        self.hostUuid = None        
+        self.hostUuid = None       
+         
         self.PAXOS_HOSTS = []
+        self.PAXOS_ACCEPTORS = []
+        
         self.PAXOS_STATE = Mydict()
         self.interruptEvent = threading.Event()
+        
+        self.SIGNAL_SEND = Mydict()
+        self.SIGNAL_RECV = Queue.Queue()
+        
+        self.CACHE_SEND = Mydict()
+        self.CACHE_RECV = Mydict()
         
 wsgiObj = pywsgi()

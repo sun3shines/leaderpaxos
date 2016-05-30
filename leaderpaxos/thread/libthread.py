@@ -15,6 +15,14 @@ class do_paxos_get_state(threading.Thread):
 class do_paxos_display_state(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-    def run(self):
         
+    def run(self):
         display_state()
+        
+class do_paxos_communicate(threading.Thread):
+    
+    def __init__(self):
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        pass

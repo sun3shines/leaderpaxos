@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import traceback
-from leaderpaxos.accptor.httpserver.static import wsgiObj
-from leaderpaxos.accptor.httpserver.core.wsgi import run_wsgi
+from leaderpaxos.acceptor.httpserver.static import wsgiObj
+from leaderpaxos.acceptor.httpserver.core.wsgi import run_wsgi
 
 def start():
     wsgiObj.interruptEvent.clear()
