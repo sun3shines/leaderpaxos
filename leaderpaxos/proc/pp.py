@@ -6,6 +6,7 @@ import Queue
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state,\
     do_paxos_broad,do_paxos_learn,do_paxos_decision,do_paxos_proposer
+from leaderpaxos.share.signal import signal_sleep
 
 def proposer_iduuid(index,hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
     
@@ -36,7 +37,7 @@ def proposer_load():
     print workdir
     if not os.path.exists(workdir):
         os.mkdir(workdir)
-        
+
     for hostUuid,host,port in wsgiObj.PAXOS_HOSTS[:wsgiObj.procindex]:
         if hostUuid == wsgiObj.hostUuid:
             continue
@@ -51,6 +52,6 @@ def proposer_load():
             continue
         do_paxos_broad(acceptorUuid,host,port).start()
         do_paxos_learn(acceptorUuid,host,port).start()
-        
+       
     do_paxos_decision().start()
     do_paxos_proposer().start()

@@ -72,20 +72,25 @@ def key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val):
 def is_proposal():
     
     proposal = True
-    for hostUuid,_,_ in wsgiObj.PAXOS_HOSTS:
+    for hostUuid,_,_ in wsgiObj.PAXOS_HOSTS[:wsgiObj.procindex]:
         if hostUuid == wsgiObj.hostUuid:
             continue
         if True == wsgiObj.PAXOS_STATE.get(hostUuid,False):
             proposal = False    
             break
-    if wsgiObj.leaderUuid and True == wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False):
+    if wsgiObj.leaderUuid and wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False):
+        print 'leader state True'
         proposal = False
+    else:
+        print wsgiObj.leaderUuid,wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False)
+        print 'leader state False'
         
     return proposal
 
 def identity_proposer_process():
     
     leaderUuid,leaderTerm,broadUuid = item_proposer_learn(key_paxos_leader)
+    print 'learn leader %s from acceptor' % (leaderUuid)
     leaderTerm = int(leaderTerm)
     if not leaderUuid:
         if is_proposal():

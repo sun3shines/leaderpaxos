@@ -4,9 +4,9 @@ from leaderpaxos.proc.pa import acceptor_iduuid,acceptor_load
 from leaderpaxos.acceptor.httpserver.core.run import start
 
 
-paxos_acceptors = [('jUrSriFq-cCvpHT-NX4e','127.0.0.1',19011),
-                   ('kgfVNfTc-jSpDxE-SoTp','127.0.0.1',19012),
-                   ('bLwGEq38-DXFTS7-XuBT','127.0.0.1',19013)]
+paxos_acceptors = [('jursrifq-ccvpht-nx4e','127.0.0.1',19011),
+                   ('kgfvnftc-jspdxe-sotp','127.0.0.1',19012),
+                   ('blwgeq38-dxfts7-xubt','127.0.0.1',19013)]
 
 @acceptor_iduuid(*paxos_acceptors[2],acceptors=paxos_acceptors)
 def pstart(*args,**kwargs):
