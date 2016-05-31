@@ -13,7 +13,6 @@ def doTest(request):
     
 def do_paxos_learn(request):
 
-    import pdb;pdb.set_trace()
     param = json.loads(request.body)
     item = param.get('item')
     if item == key_paxos_leader:
@@ -29,7 +28,7 @@ def do_paxos_learn(request):
     return jresponse('0',msgval,request,200)
 
 def do_paxos_broad(request):
-    import pdb;pdb.set_trace()
+
     param = json.loads(request.body)
     item = param.get('item')
     

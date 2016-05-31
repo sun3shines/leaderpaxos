@@ -68,7 +68,6 @@ def paxos_decision():
             pass
         
 def paxos_proposer_main():
-    import pdb;pdb.set_trace()
     wsgiObj.PAXOS_IDENTITY = identity_proposer
     while True:
         if identity_proposer == wsgiObj.PAXOS_IDENTITY:

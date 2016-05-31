@@ -18,7 +18,7 @@ class pywsgi:
         
         self.interruptEvent = threading.Event()
         
-        self.PAXOS_LEADER_TERM = 20
+        self.PAXOS_LEADER_TERM = 10
         
         self.broadUuid = None
         

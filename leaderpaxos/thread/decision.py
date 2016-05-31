@@ -17,7 +17,7 @@ def leader_broadcast(item,val,broadUuid):
         if hostUuid == wsgiObj.hostUuid:
             continue
         wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
-        wsgiObj.SIGNAL_LEARN_SEND.get(hostUuid).put(0)
+        wsgiObj.SIGNAL_BROAD_SEND.get(hostUuid).put(0)
 
 def item_proposer_learn(item):
     
@@ -26,7 +26,7 @@ def item_proposer_learn(item):
             continue
         wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,
                                          'val':None})
-        wsgiObj.SIGNAL_BROAD_SEND.get(hostUuid).put(0)
+        wsgiObj.SIGNAL_LEARN_SEND.get(hostUuid).put(0)
         
     val = wsgiObj.MAIN_LEARN_RECV.get()
     return val
@@ -110,5 +110,5 @@ def identity_leader_process():
     
     print 'leader broad self info'
     leader_broadcast(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
-    signal_sleep(wsgiObj,wsgiObj.LEADER_TIMER)
+    signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
     

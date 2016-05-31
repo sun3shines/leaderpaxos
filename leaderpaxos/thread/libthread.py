@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import threading
+import traceback
+
 from leaderpaxos.thread.proposer import paxos_state,display_state,paxos_broad_base,\
     paxos_decision,paxos_proposer_main,paxos_learn_base
 
@@ -42,6 +44,7 @@ class do_paxos_learn(threading.Thread):
             paxos_learn_base(self.acceptorUuid, self.host, self.port)
         except:
             print 'thread down do_paxos_learn'
+            print traceback.format_exc()
             pass
     
 class do_paxos_broad(threading.Thread):
@@ -57,6 +60,7 @@ class do_paxos_broad(threading.Thread):
             paxos_broad_base(self.acceptorUuid, self.host, self.port)
         except:
             print 'thread down do_paxos_broad'
+            print traceback.format_exc()
             pass
         
 class do_paxos_decision(threading.Thread):

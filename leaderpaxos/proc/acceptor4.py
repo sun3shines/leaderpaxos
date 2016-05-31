@@ -16,7 +16,6 @@ def pstart(*args,**kwargs):
     
 
 if __name__ == '__main__':
-    import pdb;pdb.set_trace()
     pstart()
     acceptor_broadcast(key_paxos_leader, 'aaaa', 'bbb')
     
