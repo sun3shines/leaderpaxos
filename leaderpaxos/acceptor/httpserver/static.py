@@ -20,7 +20,7 @@ class pywsgi:
         
         self.PAXOS_LEADER_TERM = 10
         
-        self.broadUuid = None
+        self.broadUuid = None 
         
         self.paxos_leader_default = ('',0,'')
         

@@ -3,7 +3,6 @@
 import Queue
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
 from leaderpaxos.thread.acceptor import do_acceptor_broad,do_paxos_acceptor
-from leaderpaxos.share.string import str_equal
 
 def acceptor_iduuid(hostuuid=None,host=None,port=None,acceptors=[]):
     

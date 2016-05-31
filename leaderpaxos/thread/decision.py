@@ -98,7 +98,7 @@ def identity_proposer_process():
             print 'because proposal ,try again'
             signal_sleep(wsgiObj,wsgiObj.PAXOS_TRY_TERM)
     else:
-        if str_equal(wsgiObj.hostUuid,  leaderUuid):
+        if str_equal(wsgiObj.hostUuid, leaderUuid):
             # 任期内重启了            
             print 'alread to be new leader' ,wsgiObj.hostUuid
             wsgiObj.leaderUuid = wsgiObj.hostUuid

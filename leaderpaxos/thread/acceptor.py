@@ -11,7 +11,7 @@ from leaderpaxos.share.string import str_equal
 def acceptor_broadcast(item,val,broadUuid):
     
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
-        if str_equal(hostUuid ,wsgiObj.hostUuid):
+        if hostUuid == wsgiObj.hostUuid:
             continue
         wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
         wsgiObj.SIGNAL_BROAD_SEND.get(hostUuid).put(0)

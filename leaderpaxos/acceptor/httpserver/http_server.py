@@ -24,7 +24,7 @@ def do_paxos_learn(request):
             msgval = json.dumps((leaderUuid,leaderTerm,broadUuid))
     else:
         msgval = ''
-        
+    print 'open learn msg %s ' % (msgval)    
     return jresponse('0',msgval,request,200)
 
 def do_paxos_broad(request):
@@ -36,7 +36,7 @@ def do_paxos_broad(request):
         leaderUuid = param.get('val')
         leaderTime = time.time()
         broadUuid = param.get('broadUuid')
-        if str_equal(broadUuid , wsgiObj.broadUuid):
+        if broadUuid == wsgiObj.broadUuid:
             print 'duplicated broad info'
         else:
             key = key_paxos_leader
