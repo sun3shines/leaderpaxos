@@ -10,7 +10,7 @@ from leaderpaxos.share.signal import signal_sleep,getQueuItem
 from leaderpaxos.share.urls import key_paxos_leader,identity_leader,identity_proposer
 from leaderpaxos.httpclient.libpaxos import paxos_alive,paxos_broad
 from leaderpaxos.thread.decision import identity_leader_process,identity_proposer_process,\
-    item_base_broad_process,item_base_learn_process,item_decision_learn_process
+    item_base_broad_process,item_base_learn_process,key_paxos_leader_decision
 
 def paxos_state(host,port,hostUuid):
     
@@ -48,7 +48,7 @@ def paxos_broad_base(acceptorUuid,host,port):
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item_base_broad_process(acceptorUuid, host, port, param)
             
-def paxos_learn_decision():
+def paxos_decision():
     
     resp_learn_leader = []
     
@@ -60,7 +60,7 @@ def paxos_learn_decision():
         
         if key_paxos_leader == item:
             val = param.get('val')
-            item_decision_learn_process(acceptorUuid,resp_learn_leader,val)
+            key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val)
         else:
             pass
         

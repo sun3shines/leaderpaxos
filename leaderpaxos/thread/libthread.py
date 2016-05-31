@@ -2,7 +2,7 @@
 
 import threading
 from leaderpaxos.thread.proposer import paxos_state,display_state,paxos_broad_base,\
-    paxos_learn_decision,paxos_proposer_main,paxos_learn_base
+    paxos_decision,paxos_proposer_main,paxos_learn_base
 
 class do_paxos_get_state(threading.Thread):
     def __init__(self,hostUuid=None,host=None,port=None):
@@ -62,7 +62,7 @@ class do_paxos_decision(threading.Thread):
         
     def run(self):
         try:
-            paxos_learn_decision()
+            paxos_decision()
         except:
             pass
     

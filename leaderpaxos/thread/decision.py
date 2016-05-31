@@ -32,7 +32,7 @@ def item_base_broad_process(acceptorUuid,host,port,param):
     broadUuid = param.get('broadUuid')
     paxos_broad(host, port, item, val, broadUuid)
     
-def item_decision_learn_process(acceptorUuid,resp_learn_leader,val):
+def key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val):
                 
     leaderUuid,leaderTerm,broadUuid = val
     resp_learn_leader.append((acceptorUuid,leaderUuid,leaderTerm,broadUuid))
