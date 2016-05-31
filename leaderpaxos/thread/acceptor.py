@@ -4,14 +4,18 @@ import threading
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
 from leaderpaxos.share.urls import identiry_acceptor
 from leaderpaxos.httpclient.libpaxos import paxos_broad
+from leaderpaxos.thread.libtimer import paxos_timer_acceptor
 
 def paxos_acceptor_main():
     
     wsgiObj.PAXOS_IDENTITY = identiry_acceptor
     
     while True:
-        pass
-    
+        key,val = wsgiObj.PAXOS_QUEUE.get()
+        start_time = val[1]
+        wsgiObj.PAXOS_VALUE.put(key,val)
+        threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor,start_time).start()
+        
 def acceptor_broadcast(acceptorUuid,host,port):
     
     while True:

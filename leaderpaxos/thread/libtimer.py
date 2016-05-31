@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import threading
 from leaderpaxos.acceptor.httpserver.static import wsgiObj as acceptorWsgiObj
-from leaderpaxos.proposer.httpserver.static import wsgiObj as leaderWsgiObj
 from leaderpaxos.share.urls import learn_paxos_leader
-from leaderpaxos.thread.communicate import paxos_broad_leader
 
-def paxos_timer_acceptor():
+def paxos_timer_acceptor(start_time):
     
-    print 'acceptor timer reset leader information'
-    acceptorWsgiObj.PAXOS_VALUE.put(learn_paxos_leader,acceptorWsgiObj.paxos_leader_default)
-    acceptorWsgiObj.PAXOS_TIMER = threading.Timer(acceptorWsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor)
-    acceptorWsgiObj.PAXOS_TIMER.start()
+    val = acceptorWsgiObj.PAXOS_VALUE.get(learn_paxos_leader)
+    current_time = val[1]
+    if current_time > start_time:
+        pass
+    else:
+        print 'timeout,acceptor timer reset leader information'
+        acceptorWsgiObj.PAXOS_VALUE.put(learn_paxos_leader,acceptorWsgiObj.paxos_leader_default)
     
-def paxos_timer_leader():
-    
-    print 'leader timer reset leader information'
-    leaderWsgiObj.LEADER_TIMER = threading.Timer(leaderWsgiObj.PAXOS_LEADER_TERM,paxos_timer_leader)
-    leaderWsgiObj.LEADER_TIMER.start()
-    paxos_broad_leader()

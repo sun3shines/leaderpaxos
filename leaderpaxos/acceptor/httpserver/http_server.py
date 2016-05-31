@@ -41,13 +41,10 @@ def do_paxos_broad(request):
         if broadUuid == wsgiObj.broadUuid:
             pass
         else:
-            wsgiObj.PAXOS_VALUE.put(learn_paxos_leader,(leaderUuid,leaderTime,broadUuid))
+            key = learn_paxos_leader
+            val = (leaderUuid,leaderTime,broadUuid)
+            wsgiObj.PAXOS_QUEUE.put((key,val))
             acceptor_broadcast(broad_paxos_leader, leaderUuid, broadUuid)
-            
-            # timer = wsgiObj.PAXOS_TIMER
-            # wsgiObj.PAXOS_TIMER = threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor)
-            # if timer:
-            #     timer.cancel()
     
     return jresponse('0','',request,200)
 
