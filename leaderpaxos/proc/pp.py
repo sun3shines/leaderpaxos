@@ -4,7 +4,8 @@ import os
 import os.path
 import Queue
 from leaderpaxos.proposer.httpserver.static import wsgiObj
-from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state
+from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state,\
+    do_paxos_communicate,do_paxos_decision,do_paxos_proposer
 
 def proposer_iduuid(hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
     
@@ -23,6 +24,8 @@ def proposer_iduuid(hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
 def create_queues():
     
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
+        if hostUuid == wsgiObj.hostUuid:
+            continue
         wsgiObj.SIGNAL_SEND.put(hostUuid,Queue.Queue())
     pass
 
@@ -42,3 +45,11 @@ def proposer_load():
     
     create_queues()
     
+    for acceptorUuid,host,port in wsgiObj.PAXOS_ACCEPTORS:
+        if acceptorUuid == wsgiObj.hostUuid:
+            continue
+        do_paxos_communicate(acceptorUuid,host,port).start()
+        
+    do_paxos_decision().start()
+    
+    do_paxos_proposer().start()

@@ -11,18 +11,18 @@ class Alive(Task):
         return strAlive
 
 class Learn(Task):
-    def __init__(self,learn_item):
-        self.learn_item = learn_item
+    def __init__(self,item):
+        self.item = item
         
     def getUrl(self):
         return strLearn
     
     def getBody(self):
-        return json.dumps({'learn_item':self.learn_item})
+        return json.dumps({'item':self.item})
     
 class Broad(Task):
-    def __init__(self,broad_item,val,broadUuid):
-        self.broad_item = broad_item
+    def __init__(self,item,val,broadUuid):
+        self.item = item
         self.val = val
         self.broadUuid = broadUuid
         
@@ -30,7 +30,7 @@ class Broad(Task):
         return strBroad
     
     def getBody(self):
-        return json.dumps({'broad_item':self.teach_item,
+        return json.dumps({'item':self.item,
                            'val':self.val,'broadUuid':self.broadUuid})
         
 def paxos_alive(host,port):
@@ -54,7 +54,7 @@ def test():
     pass
 
 if __name__ == '__main__':
-#    paxos_alive('127.0.0.1',10011)
+    paxos_alive('127.0.0.1',10011)
     print paxos_learn('127.0.0.1',19011,learn_paxos_leader)
     print paxos_broad('127.0.0.1',19011,teach_paxos_leader,'nSwfsePF-0GHDbc-KJcV')
     

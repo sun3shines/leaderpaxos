@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from leaderpaxos.proc.pa import acceptor_iduuid
+from leaderpaxos.proc.pa import acceptor_iduuid,acceptor_load
 from leaderpaxos.acceptor.httpserver.core.run import start
 
 
@@ -10,6 +10,7 @@ paxos_acceptors = [('jUrSriFq-cCvpHT-NX4e','127.0.0.1',19011),
 
 @acceptor_iduuid(*paxos_acceptors[1],acceptors=paxos_acceptors)
 def pstart(*args,**kwargs):
+    acceptor_load()
     start()
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ from leaderpaxos.share.http import jresponse
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
 from leaderpaxos.share.urls import learn_paxos_leader,broad_paxos_leader
 from leaderpaxos.thread.libtimer import paxos_timer_acceptor
+from leaderpaxos.thread.communicate import acceptor_broadcast
 
 def doTest(request):
 
@@ -15,8 +16,8 @@ def doTest(request):
 def do_paxos_learn(request):
 
     param = json.loads(request.body)
-    learn_item = param.get('learn_item')
-    if learn_item == learn_paxos_leader:
+    item = param.get('item')
+    if item == learn_paxos_leader:
         leaderUuid,leaderTime,broadUuid = wsgiObj.PAXOS_VALUE.get(learn_paxos_leader, wsgiObj.paxos_leader_default)
         if not leaderUuid:
             msgval = json.dumps(wsgiObj.paxos_leader_default)
@@ -31,21 +32,22 @@ def do_paxos_learn(request):
 def do_paxos_broad(request):
     
     param = json.loads(request.body)
-    broad_item = param.get('broad_item')
+    item = param.get('item')
     
-    if broad_item == broad_paxos_leader:
+    if item == broad_paxos_leader:
         leaderUuid = param.get('val')
         leaderTime = time.time()
-        broadUuid = param.get('broad_uuid')
+        broadUuid = param.get('broadUuid')
         if broadUuid == wsgiObj.broadUuid:
             pass
         else:
             wsgiObj.PAXOS_VALUE.put(learn_paxos_leader,(leaderUuid,leaderTime,broadUuid))
+            acceptor_broadcast(broad_paxos_leader, leaderUuid, broadUuid)
             
-            timer = wsgiObj.PAXOS_TIMER
-            wsgiObj.PAXOS_TIMER = threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor)
-            if timer:
-                timer.cancel()
+            # timer = wsgiObj.PAXOS_TIMER
+            # wsgiObj.PAXOS_TIMER = threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor)
+            # if timer:
+            #     timer.cancel()
     
     return jresponse('0','',request,200)
 

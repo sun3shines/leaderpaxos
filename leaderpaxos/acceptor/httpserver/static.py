@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import Queue
 import threading
 from leaderpaxos.share.cache.lockdict import Mydict
 
@@ -27,4 +28,11 @@ class pywsgi:
         
         self.paxos_leader_default = ('',0,'')
         
+        self.PAXOS_IDENTITY = None
+        
+        self.SIGNAL_SEND = Mydict()
+        self.CACHE_SEND = Mydict()
+        
+        
+        self.PAXOS_ACCEPTORS = []
 wsgiObj = pywsgi()
