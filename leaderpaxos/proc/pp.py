@@ -38,7 +38,7 @@ def proposer_load():
     if not os.path.exists(workdir):
         os.mkdir(workdir)
 
-    for hostUuid,host,port in wsgiObj.PAXOS_HOSTS[:wsgiObj.procindex]:
+    for hostUuid,host,port in wsgiObj.PAXOS_HOSTS:
         if hostUuid == wsgiObj.hostUuid:
             continue
         do_paxos_get_state(hostUuid,host,port).start()

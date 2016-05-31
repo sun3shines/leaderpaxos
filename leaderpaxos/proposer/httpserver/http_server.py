@@ -11,5 +11,4 @@ def do_paxos_alive(request):
 	
 	param = json.loads(request.body)
 	clientUuid = param.get('clientUuid')
-	wsgiObj.PAXOS_STATE.put(clientUuid,True)
 	return jresponse('0',wsgiObj.hostUuid,request,200)
