@@ -59,17 +59,18 @@ def paxos_decision():
         
         acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
+        print acceptorUuid,param
         item = param.get('item')
         
         if key_paxos_leader == item:
             val = param.get('val')
-            key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val)
+            resp_learn_leader = key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val)
         else:
             pass
         
 def paxos_proposer_main():
+
     wsgiObj.PAXOS_IDENTITY = identity_proposer
-    import pdb;pdb.set_trace()
     while True:
         print 'loop again'
         if identity_proposer == wsgiObj.PAXOS_IDENTITY:

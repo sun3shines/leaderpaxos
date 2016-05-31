@@ -67,7 +67,8 @@ def key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val):
         
         wsgiObj.MAIN_LEARN_RECV.put(learn_leader_data)
         resp_learn_leader = []
-        
+    return resp_learn_leader
+
 def is_proposal():
     
     proposal = True
