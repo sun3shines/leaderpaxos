@@ -11,7 +11,7 @@ paxos_acceptors = [('jUrSriFq-cCvpHT-NX4e','127.0.0.1',19011),
                    ('kgfVNfTc-jSpDxE-SoTp','127.0.0.1',19012),
                    ('bLwGEq38-DXFTS7-XuBT','127.0.0.1',19013)]
 
-@proposer_iduuid(*paxos_hosts[2],hosts=paxos_hosts)
+@proposer_iduuid(*paxos_hosts[2],hosts=paxos_hosts,acceptors=paxos_acceptors)
 def pstart(*args,**kwargs):
     proposer_load()
     start()

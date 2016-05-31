@@ -13,7 +13,6 @@ url2view.update({strBroad:do_paxos_broad})
 def process_request(request):
     
     url = request.path
-    print url
     if url not in url2view:
         return jresponse('-1','url error',request,404)
      

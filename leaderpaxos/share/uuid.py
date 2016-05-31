@@ -54,7 +54,7 @@ def get_uuid():
 def get_vs_uuid():
 
     vs_uuid = get_uuid()
-    return vs_uuid
+    return vs_uuid.lower()
     
 def loadUuid():
     HOST_PATH = ''

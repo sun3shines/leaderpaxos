@@ -6,11 +6,12 @@ from leaderpaxos.share.urls import identiry_acceptor,key_paxos_leader
 from leaderpaxos.httpclient.libpaxos import paxos_broad
 from leaderpaxos.thread.libtimer import paxos_timer_acceptor
 from leaderpaxos.share.signal import getQueuItem
+from leaderpaxos.share.string import str_equal
 
 def acceptor_broadcast(item,val,broadUuid):
     
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
-        if hostUuid == wsgiObj.hostUuid:
+        if str_equal(hostUuid ,wsgiObj.hostUuid):
             continue
         wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
         wsgiObj.SIGNAL_BROAD_SEND.get(hostUuid).put(0)
@@ -22,7 +23,7 @@ def paxos_acceptor_main():
     while True:
         
         key,val = getQueuItem(wsgiObj,wsgiObj.PAXOS_QUEUE)
-        if key == key_paxos_leader:
+        if str_equal(key ,key_paxos_leader):
             leaderUuid,leaderTime,broadUuid = val
             wsgiObj.broadUuid = broadUuid
             print 'get info %s %s' % (key_paxos_leader,leaderUuid)

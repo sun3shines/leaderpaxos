@@ -11,6 +11,7 @@ from leaderpaxos.share.urls import key_paxos_leader,identity_leader,identity_pro
 from leaderpaxos.httpclient.libpaxos import paxos_alive,paxos_broad
 from leaderpaxos.thread.decision import identity_leader_process,identity_proposer_process,\
     item_base_broad_process,item_base_learn_process,key_paxos_leader_decision
+from leaderpaxos.share.string import str_equal
 
 def paxos_state(host,port,hostUuid):
     
@@ -30,7 +31,6 @@ def display_state():
         for hostUuid,_,_ in wsgiObj.PAXOS_HOSTS:
             if hostUuid == wsgiObj.hostUuid:
                 continue
-            print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
         signal_sleep(wsgiObj,3)
 
 # 因为是相同的队列，所以导致了paxos_learn_base 和 paxos_broad_base 发生了抢占
@@ -70,6 +70,7 @@ def paxos_decision():
 def paxos_proposer_main():
     wsgiObj.PAXOS_IDENTITY = identity_proposer
     while True:
+        print 'loop again'
         if identity_proposer == wsgiObj.PAXOS_IDENTITY:
             identity_proposer_process()
                 

@@ -6,6 +6,7 @@ import Queue
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state,\
     do_paxos_broad,do_paxos_learn,do_paxos_decision,do_paxos_proposer
+from leaderpaxos.share.string import str_equal
 
 def proposer_iduuid(hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
     

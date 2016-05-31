@@ -9,6 +9,7 @@ from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.httpclient.libpaxos import paxos_learn,paxos_broad
 from leaderpaxos.share.http import http_success
 from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuid
+from leaderpaxos.share.string import str_equal
 
 def leader_broadcast(item,val,broadUuid):
     
@@ -84,25 +85,27 @@ def is_proposal():
 def identity_proposer_process():
     
     leaderUuid,leaderTerm,broadUuid = item_proposer_learn(key_paxos_leader)
-    
+    leaderTerm = int(leaderTerm)
     if not leaderUuid:
         if is_proposal():
-            print '%s to be new leader' % (wsgiObj.hostUuid)
+            print 'going to be new leader' ,wsgiObj.hostUuid
             leader_broadcast(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
             wsgiObj.leaderUuid = wsgiObj.hostUuid
             wsgiObj.PAXOS_IDENTITY = identity_leader
             signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
             
         else:
+            print 'because proposal ,try again'
             signal_sleep(wsgiObj,wsgiObj.PAXOS_TRY_TERM)
     else:
-        if wsgiObj.hostUuid == leaderUuid:
+        if str_equal(wsgiObj.hostUuid,  leaderUuid):
             # 任期内重启了            
-            print '%s to be new leader' % (wsgiObj.hostUuid)
+            print 'alread to be new leader' ,wsgiObj.hostUuid
             wsgiObj.leaderUuid = wsgiObj.hostUuid
             wsgiObj.PAXOS_IDENTITY = identity_leader
             signal_sleep(wsgiObj,leaderTerm)
         else:
+            print 'learn leader as %s' % (leaderUuid)
             wsgiObj.leaderUuid = leaderUuid
             signal_sleep(wsgiObj,leaderTerm)
 
