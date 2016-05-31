@@ -17,7 +17,7 @@ def paxos_state(host,port,hostUuid):
     
     while True:
         
-        resp = paxos_alive(host, port)
+        resp = paxos_alive(host, port,wsgiObj.hostUuid)
         if http_success(resp) and hostUuid.lower() == resp.get('msg','').lower():
             wsgiObj.PAXOS_STATE.put(hostUuid,True)
         else:
@@ -31,6 +31,7 @@ def display_state():
         for hostUuid,_,_ in wsgiObj.PAXOS_HOSTS:
             if hostUuid == wsgiObj.hostUuid:
                 continue
+        print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
         signal_sleep(wsgiObj,3)
 
 # 因为是相同的队列，所以导致了paxos_learn_base 和 paxos_broad_base 发生了抢占

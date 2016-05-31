@@ -7,9 +7,15 @@ from leaderpaxos.share.urls import strAlive,strLearn,strBroad
 from leaderpaxos.share.urls import key_paxos_leader
 
 class Alive(Task):
+    def __init__(self,clientUuid):
+        self.clientUuid = clientUuid
+        
     def getUrl(self):
         return strAlive
 
+    def getBody(self):
+        return json.dumps({'clientUuid':self.clientUuid})
+    
 class Learn(Task):
     def __init__(self,item):
         self.item = item
@@ -33,9 +39,9 @@ class Broad(Task):
         return json.dumps({'item':self.item,
                            'val':self.val,'broadUuid':self.broadUuid})
         
-def paxos_alive(host,port):
+def paxos_alive(host,port,clientUuid):
     
-    t = Alive()
+    t = Alive(clientUuid)
     mission.execute(t, host, port, 5)
     return t.response
 
@@ -54,7 +60,7 @@ def test():
     pass
 
 if __name__ == '__main__':
-    paxos_alive('127.0.0.1',10011)
+    paxos_alive('127.0.0.1',10011,'')
     print paxos_learn('127.0.0.1',19011,key_paxos_leader)
     print paxos_broad('127.0.0.1',19011,key_paxos_leader,'nSwfsePF-0GHDbc-KJcV')
     

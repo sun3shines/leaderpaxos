@@ -7,8 +7,9 @@ from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state,\
     do_paxos_broad,do_paxos_learn,do_paxos_decision,do_paxos_proposer
 
-def proposer_iduuid(hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
+def proposer_iduuid(index,hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
     
+    wsgiObj.procindex = index
     wsgiObj.hostUuid = hostuuid
     wsgiObj.WSGI_HOST = host
     wsgiObj.WSGI_PORT = port
@@ -36,7 +37,7 @@ def proposer_load():
     if not os.path.exists(workdir):
         os.mkdir(workdir)
         
-    for hostUuid,host,port in wsgiObj.PAXOS_HOSTS:
+    for hostUuid,host,port in wsgiObj.PAXOS_HOSTS[:wsgiObj.procindex]:
         if hostUuid == wsgiObj.hostUuid:
             continue
         do_paxos_get_state(hostUuid,host,port).start()

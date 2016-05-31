@@ -40,4 +40,6 @@ class pywsgi:
         
         self.paxos_leader_default = ('',0,'')
         
+        self.procindex = 0
+        
 wsgiObj = pywsgi()
