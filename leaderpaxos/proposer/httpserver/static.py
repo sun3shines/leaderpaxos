@@ -31,7 +31,7 @@ class pywsgi:
         
         self.MAIN_LEARN_RECV = Queue.Queue()
         
-        self.PAXOS_LEADER_TERM = 10
+        self.PAXOS_LEADER_TERM = 20
          
         self.broadUuid = None
         self.leaderUuid = None
