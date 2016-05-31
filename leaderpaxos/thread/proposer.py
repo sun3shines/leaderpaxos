@@ -7,12 +7,10 @@ import threading
 from leaderpaxos.share.http import http_success
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.signal import signal_sleep,getQueuItem
-from leaderpaxos.share.urls import learn_paxos_leader,identity_leader,identity_proposer,\
-    broad_paxos_leader
-from leaderpaxos.httpclient.libpaxos import paxos_alive
+from leaderpaxos.share.urls import key_paxos_leader,identity_leader,identity_proposer
+from leaderpaxos.httpclient.libpaxos import paxos_alive,paxos_broad
 from leaderpaxos.thread.decision import identity_leader_process,identity_proposer_process,\
-    item_communicate_broad_process,item_communicate_learn_process,item_decision_broad_process,\
-    item_decision_learn_process
+    item_base_broad_process,item_base_learn_process,item_decision_learn_process
 
 def paxos_state(host,port,hostUuid):
     
@@ -35,23 +33,22 @@ def display_state():
             print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
         signal_sleep(wsgiObj,3)
 
-def paxos_communicate(acceptorUuid,host,port):
+def paxos_learn_base(acceptorUuid,host,port):
     
     while True:
-        
         getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item = param.get('item')
-        
-        if learn_paxos_leader == item:
-            item_communicate_learn_process(acceptorUuid,host,port)
+        item_base_learn_process(acceptorUuid,host,port,item)
             
-        elif broad_paxos_leader == item:
-            item_communicate_broad_process(acceptorUuid,host,port,param)
-        else:
-            pass
-        
-def paxos_decision():
+def paxos_broad_base(acceptorUuid,host,port):
+    
+    while True:
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
+        param = wsgiObj.CACHE_SEND.get(acceptorUuid)
+        item_base_broad_process(acceptorUuid, host, port, param)
+            
+def paxos_learn_decision():
     
     resp_learn_leader = []
     
@@ -61,11 +58,9 @@ def paxos_decision():
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
         item = param.get('item')
         
-        if learn_paxos_leader == item:
+        if key_paxos_leader == item:
             val = param.get('val')
             item_decision_learn_process(acceptorUuid,resp_learn_leader,val)
-        elif broad_paxos_leader == item:       
-            item_decision_broad_process()
         else:
             pass
         

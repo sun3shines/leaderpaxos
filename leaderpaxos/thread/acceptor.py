@@ -2,7 +2,7 @@
 
 import threading
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
-from leaderpaxos.share.urls import identiry_acceptor,learn_paxos_leader
+from leaderpaxos.share.urls import identiry_acceptor,key_paxos_leader
 from leaderpaxos.httpclient.libpaxos import paxos_broad
 from leaderpaxos.thread.libtimer import paxos_timer_acceptor
 from leaderpaxos.share.signal import getQueuItem
@@ -22,12 +22,12 @@ def paxos_acceptor_main():
     while True:
         
         key,val = getQueuItem(wsgiObj,wsgiObj.PAXOS_QUEUE)
-        if key == learn_paxos_leader:
+        if key == key_paxos_leader:
             leaderUuid,leaderTime,broadUuid = val
             wsgiObj.broadUuid = broadUuid
-            print 'get info %s %s' % (learn_paxos_leader,leaderUuid)
+            print 'get info %s %s' % (key_paxos_leader,leaderUuid)
             start_time = leaderTime
-            wsgiObj.PAXOS_VALUE.put(learn_paxos_leader,val)
+            wsgiObj.PAXOS_VALUE.put(key_paxos_leader,val)
             threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor,[start_time]).start()
         else:
             print 'get info %s' % (key)

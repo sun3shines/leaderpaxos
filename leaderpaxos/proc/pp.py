@@ -5,7 +5,7 @@ import os.path
 import Queue
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_state,\
-    do_paxos_communicate,do_paxos_decision,do_paxos_proposer
+    do_paxos_broad,do_paxos_learn,do_paxos_decision,do_paxos_proposer
 
 def proposer_iduuid(hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
     
@@ -48,8 +48,8 @@ def proposer_load():
     for acceptorUuid,host,port in wsgiObj.PAXOS_ACCEPTORS:
         if acceptorUuid == wsgiObj.hostUuid:
             continue
-        do_paxos_communicate(acceptorUuid,host,port).start()
+        do_paxos_broad(acceptorUuid,host,port).start()
+        do_paxos_learn(acceptorUuid,host,port).start()
         
     do_paxos_decision().start()
-    
     do_paxos_proposer().start()

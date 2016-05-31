@@ -4,7 +4,7 @@ import json
 from leaderpaxos.httpclient.core.task import Task
 import leaderpaxos.httpclient.core.mission as mission 
 from leaderpaxos.share.urls import strAlive,strLearn,strBroad
-from leaderpaxos.share.urls import learn_paxos_leader,teach_paxos_leader
+from leaderpaxos.share.urls import key_paxos_leader
 
 class Alive(Task):
     def getUrl(self):
@@ -55,6 +55,6 @@ def test():
 
 if __name__ == '__main__':
     paxos_alive('127.0.0.1',10011)
-    print paxos_learn('127.0.0.1',19011,learn_paxos_leader)
-    print paxos_broad('127.0.0.1',19011,teach_paxos_leader,'nSwfsePF-0GHDbc-KJcV')
+    print paxos_learn('127.0.0.1',19011,key_paxos_leader)
+    print paxos_broad('127.0.0.1',19011,key_paxos_leader,'nSwfsePF-0GHDbc-KJcV')
     

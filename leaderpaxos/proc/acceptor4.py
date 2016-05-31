@@ -3,7 +3,7 @@
 from leaderpaxos.proc.pa import acceptor_iduuid,acceptor_load
 from leaderpaxos.acceptor.httpserver.core.run import start
 from leaderpaxos.thread.acceptor import acceptor_broadcast
-from leaderpaxos.share.urls import broad_paxos_leader
+from leaderpaxos.share.urls import key_paxos_leader
 
 paxos_acceptors = [('jUrSriFq-cCvpHT-NX4e','127.0.0.1',19011),
                    ('kgfVNfTc-jSpDxE-SoTp','127.0.0.1',19012),
@@ -18,5 +18,5 @@ def pstart(*args,**kwargs):
 if __name__ == '__main__':
     import pdb;pdb.set_trace()
     pstart()
-    acceptor_broadcast(broad_paxos_leader, 'aaaa', 'bbb')
+    acceptor_broadcast(key_paxos_leader, 'aaaa', 'bbb')
     

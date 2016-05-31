@@ -2,17 +2,19 @@
 
 import json
 import threading
-from leaderpaxos.share.urls import learn_paxos_leader,broad_paxos_leader,identity_leader,identity_proposer
+from leaderpaxos.share.urls import key_paxos_leader,identity_leader,identity_proposer
 from leaderpaxos.share.signal import signal_sleep
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 
 from leaderpaxos.httpclient.libpaxos import paxos_learn,paxos_broad
 from leaderpaxos.share.http import http_success
 from leaderpaxos.thread.communicate import paxos_broad_leader
+from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuid
 
-def item_communicate_learn_process(acceptorUuid,host,port):
+
+def item_base_learn_process(acceptorUuid,host,port,item):
     
-    resp = paxos_learn(host, port, learn_paxos_leader)
+    resp = paxos_learn(host, port, item)
     if http_success(resp):
         msgval = json.loads(resp.get('msg'))
         leaderUuid,leaderTerm,broadUuid = tuple(msgval)
@@ -20,16 +22,16 @@ def item_communicate_learn_process(acceptorUuid,host,port):
     else:
         val = ('failed',0,'')
     
-    wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':learn_paxos_leader,'val':val})
+    wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':item,'val':val})
     wsgiObj.SIGNAL_RECV.put(acceptorUuid)
 
-def item_communicate_broad_process(acceptorUuid,host,port,param):
+def item_base_broad_process(acceptorUuid,host,port,param):
     
     item = param.get('item')
     val = param.get('val')
     broadUuid = param.get('broadUuid')
     paxos_broad(host, port, item, val, broadUuid)
-
+    
 def item_decision_learn_process(acceptorUuid,resp_learn_leader,val):
                 
     leaderUuid,leaderTerm,broadUuid = val
@@ -46,9 +48,6 @@ def item_decision_learn_process(acceptorUuid,resp_learn_leader,val):
         wsgiObj.MAIN_LEARN_RECV.put(learn_leader_data)
         resp_learn_leader = []
         
-def item_decision_broad_process():
-    pass
-
 def is_proposal():
     
     proposal = True
@@ -68,7 +67,7 @@ def identity_proposer_process():
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
         if hostUuid == wsgiObj.hostUuid:
             continue
-        wsgiObj.CACHE_SEND.put(hostUuid,{'item':learn_paxos_leader,
+        wsgiObj.CACHE_SEND.put(hostUuid,{'item':key_paxos_leader,
                                          'val':None})
         wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)
         
@@ -78,7 +77,7 @@ def identity_proposer_process():
     if not leaderUuid:
         if is_proposal():
             print '%s to be new leader' % (wsgiObj.hostUuid)
-            paxos_broad_leader()
+            paxos_broad_leader(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
             wsgiObj.leaderUuid = wsgiObj.hostUuid
             wsgiObj.PAXOS_IDENTITY = identity_leader
             signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
@@ -99,6 +98,6 @@ def identity_proposer_process():
 def identity_leader_process():
     
     print 'leader broad self info'
-    paxos_broad_leader()
+    paxos_broad_leader(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
     signal_sleep(wsgiObj,wsgiObj.LEADER_TIMER)
     
