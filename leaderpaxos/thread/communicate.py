@@ -13,10 +13,3 @@ def paxos_broad_leader():
         wsgiObj.CACHE_SEND.put(hostUuid,{'item':broad_paxos_leader,'val':wsgiObj.hostUuid,'broadUuid':broadUuid})
         wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)
 
-def acceptor_broadcast(item,val,broadUuid):
-    
-    for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
-        if hostUuid == wsgiObj.hostUuid:
-            continue
-        wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
-        wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)

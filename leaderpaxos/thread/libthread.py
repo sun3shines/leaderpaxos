@@ -12,14 +12,20 @@ class do_paxos_get_state(threading.Thread):
         threading.Thread.__init__(self)
         
     def run(self):
-        paxos_state(self.host, self.port, self.hostUuid)
+        try:
+            paxos_state(self.host, self.port, self.hostUuid)
+        except:
+            pass
     
 class do_paxos_display_state(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         
     def run(self):
-        display_state()
+        try:
+            display_state()
+        except:
+            pass
         
 class do_paxos_communicate(threading.Thread):
     
@@ -30,7 +36,10 @@ class do_paxos_communicate(threading.Thread):
         self.port = port
         
     def run(self):
-        paxos_communicate(self.acceptorUuid, self.host, self.port)
+        try:
+            paxos_communicate(self.acceptorUuid, self.host, self.port)
+        except:
+            pass
     
 class do_paxos_decision(threading.Thread):
     
@@ -38,7 +47,10 @@ class do_paxos_decision(threading.Thread):
         threading.Thread.__init__(self)
         
     def run(self):
-        paxos_decision()
+        try:
+            paxos_decision()
+        except:
+            pass
     
 class do_paxos_proposer(threading.Thread):
     
@@ -46,6 +58,9 @@ class do_paxos_proposer(threading.Thread):
         threading.Thread.__init__(self)
         
     def run(self):
-        paxos_proposer_main()
+        try:
+            paxos_proposer_main()
+        except:
+            pass
 
     

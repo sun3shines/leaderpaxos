@@ -2,25 +2,41 @@
 
 import threading
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
-from leaderpaxos.share.urls import identiry_acceptor
+from leaderpaxos.share.urls import identiry_acceptor,learn_paxos_leader
 from leaderpaxos.httpclient.libpaxos import paxos_broad
 from leaderpaxos.thread.libtimer import paxos_timer_acceptor
+from leaderpaxos.share.signal import getQueuItem
 
+def acceptor_broadcast(item,val,broadUuid):
+    
+    for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
+        if hostUuid == wsgiObj.hostUuid:
+            continue
+        wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
+        wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)
+        
 def paxos_acceptor_main():
     
     wsgiObj.PAXOS_IDENTITY = identiry_acceptor
     
     while True:
-        key,val = wsgiObj.PAXOS_QUEUE.get()
-        start_time = val[1]
-        wsgiObj.PAXOS_VALUE.put(key,val)
-        threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor,start_time).start()
         
-def acceptor_broadcast(acceptorUuid,host,port):
+        key,val = getQueuItem(wsgiObj,wsgiObj.PAXOS_QUEUE)
+        if key == learn_paxos_leader:
+            leaderUuid,leaderTime,broadUuid = val
+            wsgiObj.broadUuid = broadUuid
+            print 'get info %s %s' % (learn_paxos_leader,leaderUuid)
+            start_time = leaderTime
+            wsgiObj.PAXOS_VALUE.put(learn_paxos_leader,val)
+            threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor,[start_time]).start()
+        else:
+            print 'get info %s' % (key)
+            
+def paxos_acceptor_broadcast(acceptorUuid,host,port):
     
     while True:
         
-        wsgiObj.SIGNAL_SEND.get(acceptorUuid).get()
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         broadUuid = param.get('broadUuid')
         item = param.get('item')
@@ -33,7 +49,10 @@ class do_paxos_acceptor(threading.Thread):
         threading.Thread.__init__(self)
         
     def run(self):
-        paxos_acceptor_main()
+        try:
+            paxos_acceptor_main()
+        except:
+            pass   
     
 class do_acceptor_broad(threading.Thread):
     
@@ -45,5 +64,8 @@ class do_acceptor_broad(threading.Thread):
         self.port = port
         
     def run(self):
-        acceptor_broadcast(self.acceptorUuid, self.host, self.port)
+        try:
+            paxos_acceptor_broadcast(self.acceptorUuid, self.host, self.port)
+        except:
+            pass
     

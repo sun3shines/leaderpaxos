@@ -4,9 +4,6 @@ import Queue
 import threading
 from leaderpaxos.share.cache.lockdict import Mydict
 
-SLEEP_INTERVAL = 1
-
-
 class pywsgi:
     def __init__(self):
         self.WSGI_CONF = '/usr/lib/python2.6/site-packages/leaderpaxos/acceptor/httpserver/core/paste.conf' 

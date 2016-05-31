@@ -2,12 +2,10 @@
 
 import json
 import time
-import threading
 from leaderpaxos.share.http import jresponse
 from leaderpaxos.acceptor.httpserver.static import wsgiObj
 from leaderpaxos.share.urls import learn_paxos_leader,broad_paxos_leader
-from leaderpaxos.thread.libtimer import paxos_timer_acceptor
-from leaderpaxos.thread.communicate import acceptor_broadcast
+from leaderpaxos.thread.acceptor import acceptor_broadcast
 
 def doTest(request):
 
@@ -30,7 +28,7 @@ def do_paxos_learn(request):
     return jresponse('0',msgval,request,200)
 
 def do_paxos_broad(request):
-    
+
     param = json.loads(request.body)
     item = param.get('item')
     
@@ -39,7 +37,7 @@ def do_paxos_broad(request):
         leaderTime = time.time()
         broadUuid = param.get('broadUuid')
         if broadUuid == wsgiObj.broadUuid:
-            pass
+            print 'duplicated broad info'
         else:
             key = learn_paxos_leader
             val = (leaderUuid,leaderTime,broadUuid)

@@ -6,7 +6,7 @@ import threading
 
 from leaderpaxos.share.http import http_success
 from leaderpaxos.proposer.httpserver.static import wsgiObj
-from leaderpaxos.share.signal import signal_sleep
+from leaderpaxos.share.signal import signal_sleep,getQueuItem
 from leaderpaxos.share.urls import learn_paxos_leader,identity_leader,identity_proposer,\
     broad_paxos_leader
 from leaderpaxos.httpclient.libpaxos import paxos_alive
@@ -23,7 +23,7 @@ def paxos_state(host,port,hostUuid):
             wsgiObj.PAXOS_STATE.put(hostUuid,True)
         else:
             wsgiObj.PAXOS_STATE.put(hostUuid,False)
-        signal_sleep(2)
+        signal_sleep(wsgiObj,2)
         
 def display_state():
     
@@ -33,12 +33,13 @@ def display_state():
             if hostUuid == wsgiObj.hostUuid:
                 continue
             print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
-        signal_sleep(3)
+        signal_sleep(wsgiObj,3)
 
 def paxos_communicate(acceptorUuid,host,port):
     
     while True:
-        wsgiObj.SIGNAL_SEND.get(acceptorUuid).get()
+        
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item = param.get('item')
         
@@ -46,8 +47,7 @@ def paxos_communicate(acceptorUuid,host,port):
             item_communicate_learn_process(acceptorUuid,host,port)
             
         elif broad_paxos_leader == item:
-            val = param.get('val')
-            item_communicate_broad_process(acceptorUuid,host,port,val)
+            item_communicate_broad_process(acceptorUuid,host,port,param)
         else:
             pass
         
@@ -56,7 +56,8 @@ def paxos_decision():
     resp_learn_leader = []
     
     while True:
-        acceptorUuid = wsgiObj.SIGNAL_RECV.get()
+        
+        acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_RECV)
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
         item = param.get('item')
         
@@ -71,9 +72,8 @@ def paxos_decision():
 def paxos_proposer_main():
         
     wsgiObj.PAXOS_IDENTITY = identity_proposer
-    
+    import pdb;pdb.set_trace() 
     while True:
-        
         if identity_proposer == wsgiObj.PAXOS_IDENTITY:
             identity_proposer_process()
                 

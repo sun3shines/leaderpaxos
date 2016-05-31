@@ -23,10 +23,12 @@ def item_communicate_learn_process(acceptorUuid,host,port):
     wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':learn_paxos_leader,'val':val})
     wsgiObj.SIGNAL_RECV.put(acceptorUuid)
 
-def item_communicate_broad_process(acceptorUuid,host,port,val):
+def item_communicate_broad_process(acceptorUuid,host,port,param):
     
-    leaderUuid,broaduuid = val
-    paxos_broad(host, port, broad_paxos_leader, leaderUuid, broaduuid)
+    item = param.get('item')
+    val = param.get('val')
+    broadUuid = param.get('broadUuid')
+    paxos_broad(host, port, item, val, broadUuid)
 
 def item_decision_learn_process(acceptorUuid,resp_learn_leader,val):
                 
@@ -79,23 +81,24 @@ def identity_proposer_process():
             paxos_broad_leader()
             wsgiObj.leaderUuid = wsgiObj.hostUuid
             wsgiObj.PAXOS_IDENTITY = identity_leader
-            signal_sleep(wsgiObj.PAXOS_LEADER_TERM)
+            signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
             
         else:
-            signal_sleep(wsgiObj.PAXOS_TRY_TERM)
+            signal_sleep(wsgiObj,wsgiObj.PAXOS_TRY_TERM)
     else:
         if wsgiObj.hostUuid == leaderUuid:
             # 任期内重启了            
             print '%s to be new leader' % (wsgiObj.hostUuid)
             wsgiObj.leaderUuid = wsgiObj.hostUuid
             wsgiObj.PAXOS_IDENTITY = identity_leader
-            signal_sleep(leaderTerm)
+            signal_sleep(wsgiObj,leaderTerm)
         else:
             wsgiObj.leaderUuid = leaderUuid
-            signal_sleep(leaderTerm)
+            signal_sleep(wsgiObj,leaderTerm)
 
 def identity_leader_process():
     
+    print 'leader broad self info'
     paxos_broad_leader()
-    signal_sleep(wsgiObj.LEADER_TIMER)
+    signal_sleep(wsgiObj,wsgiObj.LEADER_TIMER)
     

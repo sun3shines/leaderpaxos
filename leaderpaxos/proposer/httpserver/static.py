@@ -4,8 +4,6 @@ import Queue
 import threading
 from leaderpaxos.share.cache.lockdict import Mydict
 
-SLEEP_INTERVAL = 1
-
 def timer_func():
     wsgiObj.LEADER_TIMER = threading.Timer(wsgiObj.PAXOS_LEADER_TERM**5,timer_func)
 
