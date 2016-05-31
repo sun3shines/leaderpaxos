@@ -26,8 +26,8 @@ def create_queues():
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
         if hostUuid == wsgiObj.hostUuid:
             continue
-        wsgiObj.SIGNAL_SEND.put(hostUuid,Queue.Queue())
-    pass
+        wsgiObj.SIGNAL_LEARN_SEND.put(hostUuid,Queue.Queue())
+        wsgiObj.SIGNAL_BROAD_SEND.put(hostUuid,Queue.Queue())
 
 def proposer_load():
     

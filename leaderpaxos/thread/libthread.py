@@ -15,6 +15,7 @@ class do_paxos_get_state(threading.Thread):
         try:
             paxos_state(self.host, self.port, self.hostUuid)
         except:
+            print 'thread down do_paxos_get_state'
             pass
     
 class do_paxos_display_state(threading.Thread):
@@ -25,6 +26,7 @@ class do_paxos_display_state(threading.Thread):
         try:
             display_state()
         except:
+            print 'thread down do_paxos_display_state'
             pass
         
 class do_paxos_learn(threading.Thread):
@@ -39,6 +41,7 @@ class do_paxos_learn(threading.Thread):
         try:
             paxos_learn_base(self.acceptorUuid, self.host, self.port)
         except:
+            print 'thread down do_paxos_learn'
             pass
     
 class do_paxos_broad(threading.Thread):
@@ -53,6 +56,7 @@ class do_paxos_broad(threading.Thread):
         try:
             paxos_broad_base(self.acceptorUuid, self.host, self.port)
         except:
+            print 'thread down do_paxos_broad'
             pass
         
 class do_paxos_decision(threading.Thread):
@@ -64,6 +68,7 @@ class do_paxos_decision(threading.Thread):
         try:
             paxos_decision()
         except:
+            print 'thread down do_paxos_decision'
             pass
     
 class do_paxos_proposer(threading.Thread):
@@ -75,6 +80,7 @@ class do_paxos_proposer(threading.Thread):
         try:
             paxos_proposer_main()
         except:
+            print 'thread down do_paxos_proposer'
             pass
 
     

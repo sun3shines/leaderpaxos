@@ -22,8 +22,10 @@ class pywsgi:
         self.PAXOS_STATE = Mydict()
         self.interruptEvent = threading.Event()
         
-        self.SIGNAL_SEND = Mydict()
-        self.SIGNAL_RECV = Queue.Queue()
+        self.SIGNAL_LEARN_SEND = Mydict()
+        self.SIGNAL_LEARN_RECV = Queue.Queue()
+
+        self.SIGNAL_BROAD_SEND = Mydict()
         
         self.CACHE_SEND = Mydict()
         self.CACHE_RECV = Mydict()

@@ -8,9 +8,28 @@ from leaderpaxos.proposer.httpserver.static import wsgiObj
 
 from leaderpaxos.httpclient.libpaxos import paxos_learn,paxos_broad
 from leaderpaxos.share.http import http_success
-from leaderpaxos.thread.communicate import paxos_broad_leader
 from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuid
 
+def leader_broadcast(item,val,broadUuid):
+    
+    broadUuid = get_broad_uuid()
+    for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
+        if hostUuid == wsgiObj.hostUuid:
+            continue
+        wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
+        wsgiObj.SIGNAL_LEARN_SEND.get(hostUuid).put(0)
+
+def item_proposer_learn(item):
+    
+    for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
+        if hostUuid == wsgiObj.hostUuid:
+            continue
+        wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,
+                                         'val':None})
+        wsgiObj.SIGNAL_BROAD_SEND.get(hostUuid).put(0)
+        
+    val = wsgiObj.MAIN_LEARN_RECV.get()
+    return val
 
 def item_base_learn_process(acceptorUuid,host,port,item):
     
@@ -23,7 +42,7 @@ def item_base_learn_process(acceptorUuid,host,port,item):
         val = ('failed',0,'')
     
     wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':item,'val':val})
-    wsgiObj.SIGNAL_RECV.put(acceptorUuid)
+    wsgiObj.SIGNAL_LEARN_RECV.put(acceptorUuid)
 
 def item_base_broad_process(acceptorUuid,host,port,param):
     
@@ -64,20 +83,12 @@ def is_proposal():
 
 def identity_proposer_process():
     
-    for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
-        if hostUuid == wsgiObj.hostUuid:
-            continue
-        wsgiObj.CACHE_SEND.put(hostUuid,{'item':key_paxos_leader,
-                                         'val':None})
-        wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)
-        
-    leaderUuid,leaderTerm,broadUuid = wsgiObj.MAIN_LEARN_RECV.get()
+    leaderUuid,leaderTerm,broadUuid = item_proposer_learn(key_paxos_leader)
     
-    # 此处涉及到leader的重启了，如果是在任期内重启？和在任期外重启呢？ 
     if not leaderUuid:
         if is_proposal():
             print '%s to be new leader' % (wsgiObj.hostUuid)
-            paxos_broad_leader(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
+            leader_broadcast(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
             wsgiObj.leaderUuid = wsgiObj.hostUuid
             wsgiObj.PAXOS_IDENTITY = identity_leader
             signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
@@ -98,6 +109,6 @@ def identity_proposer_process():
 def identity_leader_process():
     
     print 'leader broad self info'
-    paxos_broad_leader(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
+    leader_broadcast(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
     signal_sleep(wsgiObj,wsgiObj.LEADER_TIMER)
     

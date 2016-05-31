@@ -33,10 +33,13 @@ def display_state():
             print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
         signal_sleep(wsgiObj,3)
 
+# 因为是相同的队列，所以导致了paxos_learn_base 和 paxos_broad_base 发生了抢占
+# 因此会出现每次调试运行的结果不同了。
+
 def paxos_learn_base(acceptorUuid,host,port):
     
     while True:
-        getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item = param.get('item')
         item_base_learn_process(acceptorUuid,host,port,item)
@@ -44,7 +47,7 @@ def paxos_learn_base(acceptorUuid,host,port):
 def paxos_broad_base(acceptorUuid,host,port):
     
     while True:
-        getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_BROAD_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item_base_broad_process(acceptorUuid, host, port, param)
             
@@ -54,7 +57,7 @@ def paxos_decision():
     
     while True:
         
-        acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_RECV)
+        acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
         item = param.get('item')
         
@@ -65,9 +68,8 @@ def paxos_decision():
             pass
         
 def paxos_proposer_main():
-        
+    import pdb;pdb.set_trace()
     wsgiObj.PAXOS_IDENTITY = identity_proposer
-    import pdb;pdb.set_trace() 
     while True:
         if identity_proposer == wsgiObj.PAXOS_IDENTITY:
             identity_proposer_process()

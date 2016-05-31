@@ -13,7 +13,7 @@ def acceptor_broadcast(item,val,broadUuid):
         if hostUuid == wsgiObj.hostUuid:
             continue
         wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,'val':val,'broadUuid':broadUuid})
-        wsgiObj.SIGNAL_SEND.get(hostUuid).put(0)
+        wsgiObj.SIGNAL_BROAD_SEND.get(hostUuid).put(0)
         
 def paxos_acceptor_main():
     
@@ -36,7 +36,7 @@ def paxos_acceptor_broadcast(acceptorUuid,host,port):
     
     while True:
         
-        getQueuItem(wsgiObj,wsgiObj.SIGNAL_SEND.get(acceptorUuid))
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_BROAD_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         broadUuid = param.get('broadUuid')
         item = param.get('item')
