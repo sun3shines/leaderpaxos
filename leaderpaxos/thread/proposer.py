@@ -31,7 +31,7 @@ def display_state():
         for hostUuid,_,_ in wsgiObj.PAXOS_HOSTS:
             if hostUuid == wsgiObj.hostUuid:
                 continue
-            print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
+            # print hostUuid,wsgiObj.PAXOS_STATE.get(hostUuid,False)
         signal_sleep(wsgiObj,3)
 
 # 因为是相同的队列，所以导致了paxos_learn_base 和 paxos_broad_base 发生了抢占
@@ -60,7 +60,7 @@ def paxos_decision():
         
         acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
-        print acceptorUuid,param
+        # print acceptorUuid,param
         item = param.get('item')
         
         if key_paxos_leader == item:

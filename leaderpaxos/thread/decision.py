@@ -82,7 +82,7 @@ def is_proposal():
         print 'leader state True'
         proposal = False
     else:
-        print wsgiObj.leaderUuid,wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False)
+        # print wsgiObj.leaderUuid,wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False)
         print 'leader state False'
         
     return proposal
