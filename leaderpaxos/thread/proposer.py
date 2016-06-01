@@ -8,10 +8,9 @@ from leaderpaxos.share.http import http_success
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.signal import signal_sleep,getQueuItem
 from leaderpaxos.share.urls import key_paxos_leader,identity_leader,identity_proposer
-from leaderpaxos.httpclient.libpaxos import paxos_alive,paxos_broad
+from leaderpaxos.httpclient.libpaxos import paxos_alive
 from leaderpaxos.thread.decision import identity_leader_process,identity_proposer_process,\
     item_base_broad_process,item_base_learn_process,key_paxos_leader_decision
-from leaderpaxos.share.string import str_equal
 
 def paxos_state(host,port,hostUuid):
     
