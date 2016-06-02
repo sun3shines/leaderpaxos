@@ -10,6 +10,7 @@ from leaderpaxos.httpclient.libpaxos import paxos_learn,paxos_broad
 from leaderpaxos.share.http import http_success
 from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuid
 from leaderpaxos.share.string import str_equal
+from leaderpaxos.share.signal import signal_sleep,getQueuItem
 
 def item_proposer_learn(item):
     
@@ -36,3 +37,11 @@ def item_learn_transmit(acceptorUuid,host,port,item):
     wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':item,'val':val})
     wsgiObj.SIGNAL_LEARN_RECV.put(acceptorUuid)
     
+def paxos_learn_base(acceptorUuid,host,port):
+    
+    while True:
+        getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_SEND.get(acceptorUuid))
+        param = wsgiObj.CACHE_SEND.get(acceptorUuid)
+        item = param.get('item')
+        item_learn_transmit(acceptorUuid,host,port,item)
+        

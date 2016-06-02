@@ -29,22 +29,3 @@ def item_decision(acceptorUuid,res,item,val):
             wsgiObj.MAIN_LEARN_RECV.put(learn_leader_data)
             res = []
     return res
-
-def is_proposal():
-    
-    proposal = True
-    for hostUuid,_,_ in wsgiObj.PAXOS_HOSTS[:wsgiObj.procindex]:
-        if hostUuid == wsgiObj.hostUuid:
-            continue
-        if True == wsgiObj.PAXOS_STATE.get(hostUuid,False):
-            proposal = False    
-            break
-    if wsgiObj.leaderUuid and wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False):
-        print 'leader state True'
-        proposal = False
-    else:
-        # print wsgiObj.leaderUuid,wsgiObj.PAXOS_STATE.get(wsgiObj.leaderUuid,False)
-        print 'leader state False'
-        
-    return proposal
-
