@@ -14,7 +14,7 @@ from leaderpaxos.thread.broad import item_proposer_broad
 def promote(sleep_time = wsgiObj.PAXOS_LEADER_TERM):
     wsgiObj.leaderUuid = wsgiObj.hostUuid
     wsgiObj.PAXOS_IDENTITY = identity_leader
-    signal_sleep(sleep_time)
+    signal_sleep(wsgiObj,sleep_time)
             
 def init_identity():
     wsgiObj.PAXOS_IDENTITY = identity_proposer

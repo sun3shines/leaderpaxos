@@ -42,4 +42,6 @@ class pywsgi:
         
         self.procindex = 0
         
+        self.itemdict = {}
+        
 wsgiObj = pywsgi()

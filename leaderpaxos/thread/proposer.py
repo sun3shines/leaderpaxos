@@ -10,19 +10,20 @@ from leaderpaxos.thread.identity import proposer,leader,init_identity,is_leader,
                         
 def paxos_decision():
     
-    resp_learn_leader = []
     while True:
         acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
         item = param.get('item')
         val = param.get('val')
         print 'learn %s %s from acceptor %s ' % (item,val,acceptorUuid)
-        item_decision(acceptorUuid, resp_learn_leader, item, val)
+        if item not in wsgiObj.itemdict:
+            wsgiObj.itemdict[item] = []
+        item_decision(acceptorUuid,item, val)
         
 def paxos_proposer_main():
 
     init_identity()
-    
+        
     while True:
         print 'loop'
         if is_proposer():

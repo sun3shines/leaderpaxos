@@ -86,6 +86,7 @@ class do_paxos_proposer(threading.Thread):
         try:
             paxos_proposer_main()
         except:
+            print traceback.format_exc()
             print 'thread down do_paxos_proposer'
             pass
 
