@@ -13,7 +13,6 @@ url2view.update({strMKeySet:doKeySet})
 url2view.update({strMSTAGet:doMstGet})
 
 def process_request(request):
-    
     url = request.path
     if url not in url2view:
         return jresponse('-1','url error',request,404)

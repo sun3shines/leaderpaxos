@@ -17,7 +17,7 @@ def doKeySet(request):
     key = param.get('key')
     val = param.get('val')
     machine_key_set(key, val)
-    return jresponse('0','test ok',request,200)
+    return jresponse('0','',request,200)
 
 def doKeyGet(request):
 
@@ -29,4 +29,5 @@ def doKeyDel(request):
 
 def doMstGet(request):
 
-    return jresponse('0','test ok',request,200)
+    mst = machine_all()
+    return jresponse('0',json.dumps(mst),request,200)

@@ -1,3 +1,4 @@
 [paste.app_factory]
 server = leaderpaxos.proposer.httpserver.core.server:app_factory
 acceptor = leaderpaxos.acceptor.httpserver.core.server:app_factory
+machine = statmachine.httpserver.core.server:app_factory
