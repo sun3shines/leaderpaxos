@@ -2,6 +2,7 @@
 
 import Queue
 import threading
+from leaderpaxos.share.cache.lockdict import Mydict
 
 class pywsgi:
     def __init__(self):
@@ -14,4 +15,6 @@ class pywsgi:
         
         self.interruptEvent = threading.Event()
 
+        self.MACHINE_STATE = Mydict()
+        
 wsgiObj = pywsgi()

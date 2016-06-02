@@ -22,4 +22,5 @@ def get_test(host,port):
 
 if __name__ == '__main__':
 #    get_test('127.0.0.1',10011)
-    get_test('127.0.0.1',19011)
+#    get_test('127.0.0.1',19011)
+    get_test('127.0.0.1',18011)

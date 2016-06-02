@@ -35,9 +35,13 @@ class Base(object):
     def getd(self,key):
         return self.d.get(key)
     
-    def rmvd(self):
-        pass
-    
+    def rmvd(self,key):
+        if self.lock.acquire():
+            if self.d.has_key(key):
+                return self.d.pop(key)
+            self.lock.release()
+            return None
+        
     @property
     def countl(self):
         return len(self.l)
@@ -46,5 +50,6 @@ class Base(object):
     def countd(self):
         return len(self.d.keys())
 
-
+    def alld(self):
+        return self.d
     

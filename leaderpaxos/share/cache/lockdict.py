@@ -15,3 +15,9 @@ class Mydict(Base):
         if not val:
             return userval
         return val
+    
+    def pop(self,key):
+        return self.rmvd(key)
+    
+    def all(self):
+        return self.alld()
