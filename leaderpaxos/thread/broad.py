@@ -2,12 +2,10 @@
 
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.httpclient.libpaxos import paxos_broad
-from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuid
 from leaderpaxos.share.signal import getQueuItem
 
 def item_proposer_broad(item,val,broadUuid):
     
-    broadUuid = get_broad_uuid()
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
         if hostUuid == wsgiObj.hostUuid:
             continue
