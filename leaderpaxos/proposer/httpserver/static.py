@@ -30,6 +30,8 @@ class pywsgi:
         self.PAXOS_IDENTITY = None
         
         self.MAIN_LEARN_RECV = Queue.Queue()
+        self.cacheLearn = Mydict()
+        self.signalLearn = Queue.Queue()
         
         self.PAXOS_LEADER_TERM = 20
          

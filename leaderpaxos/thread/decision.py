@@ -15,7 +15,7 @@ def item_decision(acceptorUuid,item,val):
                     continue
                 learn_leader_data = (leaderUuid,leaderTerm,broadUuid)
                 break
-            
-            wsgiObj.MAIN_LEARN_RECV.put(learn_leader_data)
+            wsgiObj.cacheLearn.put(item,learn_leader_data)
+            wsgiObj.signalLearn.put(item)
             wsgiObj.itemdict[item] = []
     

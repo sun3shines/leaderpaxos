@@ -21,7 +21,14 @@ def item_proposer_learn(item):
                                          'val':None})
         wsgiObj.SIGNAL_LEARN_SEND.get(hostUuid).put(0)
         
-    val = wsgiObj.MAIN_LEARN_RECV.get()
+    while True:
+        qitem = getQueuItem(wsgiObj, wsgiObj.signalLearn)
+        if qitem == item:
+            break
+        else:
+            wsgiObj.signalLearn.put(qitem)
+            signal_sleep(wsgiObj, 0.1)
+    val = wsgiObj.cacheLearn.get(qitem)
     return val
 
 def item_learn_transmit(acceptorUuid,host,port,item):
