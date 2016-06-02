@@ -14,5 +14,8 @@ identity_leader = 'identity_leader'
 strMKeySet = '/machine/key/set'
 strMKeyGet = '/machine/key/get'
 strMKeyDel = '/machine/key/del'
+strMKeyStore = '/machine/key/storage'
 
 strMSTAGet = '/machine/state/get'
+
+ERR_NOT_LEADER = 'host not leader'
