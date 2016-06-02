@@ -46,4 +46,7 @@ class pywsgi:
         
         self.itemdict = {}
         
+        self.store_param = Queue.Queue()
+        self.store_resut = Queue.Queue()
+        
 wsgiObj = pywsgi()

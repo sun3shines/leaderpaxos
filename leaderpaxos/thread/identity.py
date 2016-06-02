@@ -10,10 +10,13 @@ from leaderpaxos.share.string import str_equal
 from leaderpaxos.thread.priority import is_proposal
 from leaderpaxos.thread.learn import item_proposer_learn
 from leaderpaxos.thread.broad import item_proposer_broad
+from leaderpaxos.thread.store import do_paxos_store
 
 def promote(sleep_time = wsgiObj.PAXOS_LEADER_TERM):
+    
     wsgiObj.leaderUuid = wsgiObj.hostUuid
     wsgiObj.PAXOS_IDENTITY = identity_leader
+    do_paxos_store().start()
     signal_sleep(wsgiObj,sleep_time)
             
 def init_identity():

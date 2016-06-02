@@ -5,6 +5,7 @@ from leaderpaxos.share.http import jresponse
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.thread.identity import is_leader
 from leaderpaxos.share.urls import ERR_NOT_LEADER
+from leaderpaxos.thread.store import log_store
 def doTest(request):
 
 	return jresponse('0','test ok',request,200)
@@ -22,5 +23,5 @@ def do_mkey_store(request):
 	
 	param = json.loads(request.body)
 	logentry = param.get('logentry')
-	
+	log_store(logentry)
 	return jresponse('0','',request,200)

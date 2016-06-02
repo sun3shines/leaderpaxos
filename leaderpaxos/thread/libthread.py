@@ -89,5 +89,3 @@ class do_paxos_proposer(threading.Thread):
             print traceback.format_exc()
             print 'thread down do_paxos_proposer'
             pass
-
-    

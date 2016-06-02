@@ -7,6 +7,7 @@ from leaderpaxos.acceptor.httpserver.static import wsgiObj
 from leaderpaxos.share.urls import key_paxos_leader
 from leaderpaxos.thread.acceptor import acceptor_broadcast
 from leaderpaxos.share.string import str_equal
+
 def doTest(request):
 
     return jresponse('0','test ok',request,200)
@@ -31,6 +32,7 @@ def do_paxos_broad(request):
 
     param = json.loads(request.body)
     item = param.get('item')
+    broadUuid = param.get('broadUuid')
     
     if str_equal(item ,key_paxos_leader):
         leaderUuid = param.get('val')
@@ -40,10 +42,13 @@ def do_paxos_broad(request):
             # print 'duplicated broad info'
             pass
         else:
-            key = key_paxos_leader
             val = (leaderUuid,leaderTime,broadUuid)
-            wsgiObj.PAXOS_QUEUE.put((key,val))
+            wsgiObj.PAXOS_QUEUE.put((item,val))
             acceptor_broadcast(key_paxos_leader, leaderUuid, broadUuid)
-    
+    else:
+        item = param.get('item')
+        val = param.get('val')
+        broadUuid = param.get('broadUuid')
+        
     return jresponse('0','',request,200)
 
