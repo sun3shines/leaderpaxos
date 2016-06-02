@@ -28,22 +28,27 @@ def is_leader():
 def proposer():
     
     leaderUuid,leaderTerm,broadUuid = item_proposer_learn(key_paxos_leader)
+    print 'learn leader %s from acceptor' % (leaderUuid)
     leaderTerm = int(leaderTerm)
     if not leaderUuid:
         if is_proposal():
+            print 'going to be new leader' ,wsgiObj.hostUuid
             item_proposer_broad(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
             promote()
         else:
+            print 'because proposal ,try again'
             signal_sleep(wsgiObj,wsgiObj.PAXOS_TRY_TERM)
     else:
         if str_equal(wsgiObj.hostUuid, leaderUuid):
+            print 'alread to be new leader' ,wsgiObj.hostUuid
             promote(leaderTerm)
         else:
+            print 'learn leader as %s' % (leaderUuid)
             wsgiObj.leaderUuid = leaderUuid
             signal_sleep(wsgiObj,leaderTerm)
 
 def leader():
-    
+    print 'leader broad self info'
     item_proposer_broad(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
     signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
     

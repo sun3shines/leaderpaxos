@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json
-import threading
 from leaderpaxos.proposer.httpserver.static import wsgiObj
-
 from leaderpaxos.httpclient.libpaxos import paxos_broad
 from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuid
 from leaderpaxos.share.signal import getQueuItem
