@@ -2,7 +2,6 @@
 
 import Queue
 import threading
-from leaderpaxos.share.cache.lockdict import Mydict
 
 class pywsgi:
     def __init__(self):

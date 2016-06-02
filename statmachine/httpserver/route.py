@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from leaderpaxos.share.http import jresponse
-from leaderpaxos.share.urls import strTest,strLearn,strBroad
-from statmachine.httpserver.http_server import doTest,do_paxos_learn,do_paxos_broad
+from leaderpaxos.share.urls import strTest
+from statmachine.httpserver.http_server import doTest
 
 url2view = {}
 
 url2view.update({strTest:doTest})
-url2view.update({strLearn:do_paxos_learn})
-url2view.update({strBroad:do_paxos_broad})
 
 def process_request(request):
     
