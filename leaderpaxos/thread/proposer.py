@@ -9,8 +9,10 @@ from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.signal import signal_sleep,getQueuItem
 from leaderpaxos.share.urls import key_paxos_leader,identity_leader,identity_proposer
 from leaderpaxos.httpclient.libpaxos import paxos_alive
-from leaderpaxos.thread.decision import identity_leader_process,identity_proposer_process,\
-    item_base_broad_process,item_base_learn_process,key_paxos_leader_decision
+from leaderpaxos.thread.decision import item_decision
+from leaderpaxos.thread.learn import item_proposer_learn,item_learn_transmit
+from leaderpaxos.thread.broad import item_proposer_broad,item_broad_transmit
+from leaderpaxos.thread.identity import identity_leader_process,identity_proposer_process
 
 def paxos_state(host,port,hostUuid):
     
@@ -42,31 +44,25 @@ def paxos_learn_base(acceptorUuid,host,port):
         getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item = param.get('item')
-        item_base_learn_process(acceptorUuid,host,port,item)
+        item_learn_transmit(acceptorUuid,host,port,item)
             
 def paxos_broad_base(acceptorUuid,host,port):
     
     while True:
         getQueuItem(wsgiObj,wsgiObj.SIGNAL_BROAD_SEND.get(acceptorUuid))
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
-        item_base_broad_process(acceptorUuid, host, port, param)
+        item_broad_transmit(acceptorUuid, host, port, param)
             
 def paxos_decision():
     
     resp_learn_leader = []
     
     while True:
-        
         acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
         param = wsgiObj.CACHE_RECV.get(acceptorUuid)
-        # print acceptorUuid,param
         item = param.get('item')
-        
-        if key_paxos_leader == item:
-            val = param.get('val')
-            resp_learn_leader = key_paxos_leader_decision(acceptorUuid,resp_learn_leader,val)
-        else:
-            pass
+        val = param.get('val')
+        item_decision(acceptorUuid, resp_learn_leader, item, val)
         
 def paxos_proposer_main():
 
