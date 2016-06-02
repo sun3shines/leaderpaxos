@@ -2,6 +2,7 @@
 
 from leaderpaxos.share.urls import key_paxos_leader
 from leaderpaxos.proposer.httpserver.static import wsgiObj
+from leaderpaxos.share.signal import getQueuItem
 
 def item_decision(acceptorUuid,item,val):
     
@@ -19,3 +20,15 @@ def item_decision(acceptorUuid,item,val):
             wsgiObj.signalLearn.put(item)
             wsgiObj.itemdict[item] = []
     
+def paxos_decision():
+    
+    while True:
+        acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
+        param = wsgiObj.CACHE_RECV.get(acceptorUuid)
+        item = param.get('item')
+        val = param.get('val')
+        print 'learn %s %s from acceptor %s ' % (item,val,acceptorUuid)
+        if item not in wsgiObj.itemdict:
+            wsgiObj.itemdict[item] = []
+        item_decision(acceptorUuid,item, val)
+        
