@@ -35,11 +35,13 @@ def item_learn_transmit(acceptorUuid,host,port,item):
     
     resp = paxos_learn(host, port, item)
     if http_success(resp):
-        msgval = json.loads(resp.get('msg'))
-        leaderUuid,leaderTerm,broadUuid = tuple(msgval)
-        val = (leaderUuid,leaderTerm,broadUuid)
+        if key_paxos_leader == item:
+            msgval = json.loads(resp.get('msg'))
+            val = tuple(msgval) # leaderUuid,leaderTerm,broadUuid = val
+        else:
+            val = resp.get('msg')
     else:
-        val = ('failed',0,'')
+        val = 'failed'
     
     wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':item,'val':val})
     wsgiObj.SIGNAL_LEARN_RECV.put(acceptorUuid)
@@ -51,4 +53,48 @@ def paxos_learn_base(acceptorUuid,host,port):
         param = wsgiObj.CACHE_SEND.get(acceptorUuid)
         item = param.get('item')
         item_learn_transmit(acceptorUuid,host,port,item)
+        
+def item_decision(acceptorUuid,param):
+    
+    item = param.get('item')
+    val = param.get('val')
+    print 'learn %s %s from acceptor %s ' % (item,val,acceptorUuid)
+    
+    if item not in wsgiObj.itemdict:
+        wsgiObj.itemdict[item] = []
+        
+    itemval = val
+    wsgiObj.itemdict[item].append(itemval)
+    
+    if len(wsgiObj.itemdict[item]) == len(wsgiObj.PAXOS_ACCEPTORS):
+        if item == key_paxos_leader:
+            learn_data = wsgiObj.paxos_leader_default
+        else:
+            learn_data = ''
+            
+        for val in wsgiObj.itemdict[item]:
+            if val == 'failed':
+                continue
+            
+            if item == key_paxos_leader:
+                leaderUuid,leaderTerm,broadUuid = val
+                if not leaderUuid:
+                    continue
+            else:
+                if not val:
+                    continue
+                
+            learn_data = val
+            break
+        
+        wsgiObj.cacheLearn.put(item,learn_data)
+        wsgiObj.signalLearn.put(item)
+        wsgiObj.itemdict[item] = []
+                                 
+def paxos_decision():
+    
+    while True:
+        acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
+        param = wsgiObj.CACHE_RECV.get(acceptorUuid)
+        item_decision(acceptorUuid,param)
         

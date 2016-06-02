@@ -5,8 +5,7 @@ import traceback
 
 from leaderpaxos.thread.alive import display_state,paxos_state
 from leaderpaxos.thread.proposer import paxos_proposer_main
-from leaderpaxos.thread.decision import paxos_decision
-from leaderpaxos.thread.learn import paxos_learn_base
+from leaderpaxos.thread.learn import paxos_decision,paxos_learn_base
 from leaderpaxos.thread.broad import paxos_broad_base
 
 class do_paxos_get_state(threading.Thread):
