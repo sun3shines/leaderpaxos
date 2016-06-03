@@ -19,9 +19,9 @@ def doKeySet(request):
     param = json.loads(request.body)
     key = param.get('key')
     val = param.get('val')
-    
+    print 'mst do key set'
     flag,msg = logstorage('set',key,val)
-    
+    print 'mst log store ',msg
     if not flag:
         if msg == ERR_NOT_LEADER:
             print ERR_NOT_LEADER

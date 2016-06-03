@@ -23,5 +23,6 @@ def do_mkey_store(request):
 	
 	param = json.loads(request.body)
 	logentry = param.get('logentry')
+	print 'leader key store ',logentry
 	log_store(logentry)
 	return jresponse('0','',request,200)

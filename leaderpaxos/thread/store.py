@@ -56,7 +56,9 @@ def paxos_item_store():
             if not started:
                 started = True
                 start_mst()
+            print 'item store thread item ',keyitem
             logUuid,logentry = getQueuItem(wsgiObj, wsgiObj.store_param)
+            print 'item store thread entry',logentry
             item_proposer_broad(keyitem, logentry, get_broad_uuids())
             wsgiObj.store_resut.put((logUuid,0))
 
@@ -72,4 +74,16 @@ class do_paxos_store(threading.Thread):
             print traceback.format_exc()
             print 'thread down do_paxos_store'
             pass
+            
+class do_start_mst(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        try:
+            start_mst()
+        except:
+            print 'thread down do_start_mst'
+            pass
+            
             
