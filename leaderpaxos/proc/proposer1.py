@@ -11,8 +11,14 @@ paxos_acceptors = [('jursrifq-ccvpht-nx4e','127.0.0.1',19011),
                    ('kgfvnftc-jspdxe-sotp','127.0.0.1',19012),
                    ('blwgeq38-dxfts7-xubt','127.0.0.1',19013)]
 
+mst_cmds = ['python machine1.py',
+            'python machine2.py',
+            'python machine3.py']
+
 proc_index = 0
-@proposer_iduuid(proc_index,*paxos_hosts[proc_index],hosts=paxos_hosts,acceptors=paxos_acceptors)
+@proposer_iduuid(proc_index,*paxos_hosts[proc_index],hosts=paxos_hosts,
+                 acceptors=paxos_acceptors,mst_cmds[proc_index])
+
 def pstart(*args,**kwargs):
     proposer_load()
     start()

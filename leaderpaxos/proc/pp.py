@@ -8,7 +8,8 @@ from leaderpaxos.thread.libthread import do_paxos_get_state,do_paxos_display_sta
     do_paxos_broad,do_paxos_learn,do_paxos_decision,do_paxos_proposer
 from leaderpaxos.share.signal import signal_sleep
 
-def proposer_iduuid(index,hostuuid=None,host=None,port=None,hosts=[],acceptors=[]):
+def proposer_iduuid(index,hostuuid=None,host=None,port=None,
+                    hosts=[],acceptors=[],mst_cmd=''):
     
     wsgiObj.procindex = index
     wsgiObj.hostUuid = hostuuid
@@ -16,6 +17,7 @@ def proposer_iduuid(index,hostuuid=None,host=None,port=None,hosts=[],acceptors=[
     wsgiObj.WSGI_PORT = port
     wsgiObj.PAXOS_HOSTS = hosts
     wsgiObj.PAXOS_ACCEPTORS = acceptors
+    wsgiObj.mst_cmd = mst_cmd
     
     def __deco(func):
         def _deco(*args,**kwargs):

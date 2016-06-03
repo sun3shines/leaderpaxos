@@ -2,11 +2,18 @@
 
 import threading
 import traceback
+import subprocess
 from leaderpaxos.thread.learn import item_proposer_learn
 from leaderpaxos.thread.broad import item_proposer_broad
 from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuids
 from leaderpaxos.share.signal import getQueuItem,signal_sleep
+
+def start_machine():
+      
+    p = subprocess.Popen(wsgiObj.mst_cmd, shell=True, cwd=wsgiObj.mst_cwd)
+    p.wait()  
+    print 'statmachine process stop' 
 
 def log_store(logentry):
     

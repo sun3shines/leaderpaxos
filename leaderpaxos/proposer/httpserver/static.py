@@ -49,4 +49,7 @@ class pywsgi:
         self.store_param = Queue.Queue()
         self.store_resut = Queue.Queue()
         
+        self.mst_cwd = '/usr/lib/python2.6/site-packages/statmachine/proc'
+        self.mst_cmd = None
+         
 wsgiObj = pywsgi()
