@@ -49,7 +49,7 @@ def mst_get(host,port):
     mission.execute(t, host, port, 5)
     return t.response
 
-def key_store(host,port,key,val):
+def key_store(host,port,cmd,key,val):
     pass
 
 if __name__ == '__main__':

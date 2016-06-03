@@ -17,4 +17,8 @@ class pywsgi:
 
         self.MACHINE_STATE = Mydict()
         
+        self.leaderUuid = None
+        self.leaderHost = None
+        self.leaderPort = None
+        
 wsgiObj = pywsgi()

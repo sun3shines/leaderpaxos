@@ -3,11 +3,13 @@
 import Queue
 from statmachine.httpserver.static import wsgiObj
 
-def machine_iduuid(hostuuid=None,host=None,port=None):
+def machine_iduuid(hostuuid=None,host=None,port=None,leaderInfo =None):
     
     wsgiObj.hostUuid = hostuuid
     wsgiObj.WSGI_HOST = host
     wsgiObj.WSGI_PORT = port
+    
+    wsgiObj.leaderUuid ,wsgiObj.leaderHost ,wsgiObj.leaderPort = leaderInfo
     
     def __deco(func):
         def _deco(*args,**kwargs):
