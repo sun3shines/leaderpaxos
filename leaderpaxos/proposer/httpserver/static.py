@@ -23,9 +23,11 @@ class pywsgi:
         self.SIGNAL_LEARN_RECV = Queue.Queue()
 
         self.SIGNAL_BROAD_SEND = Mydict()
+
+        self.CACHE_BROAD_SEND = Mydict()
         
-        self.CACHE_SEND = Mydict()
-        self.CACHE_RECV = Mydict()
+        self.CACHE_LEARN_SEND = Mydict()
+        self.CACHE_LEARN_RECV = Mydict()
         
         self.PAXOS_IDENTITY = None
         

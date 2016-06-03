@@ -15,7 +15,7 @@ def doTest(request):
 def do_paxos_learn(request):
 
     param = json.loads(request.body)
-    item = param.get('item')
+    item = str(param.get('item'))
     if str_equal(item ,key_paxos_leader):
         leaderUuid,leaderTime,broadUuid = wsgiObj.PAXOS_VALUE.get(key_paxos_leader, wsgiObj.paxos_leader_default)
         if not leaderUuid:
@@ -25,13 +25,16 @@ def do_paxos_learn(request):
             msgval = json.dumps((leaderUuid,leaderTerm,broadUuid))
     else:
         msgval = wsgiObj.PAXOS_VALUE.get(item,'')
+        print 'openmsg ITEM %s VALUE %s' % (item,msgval)
     return jresponse('0',msgval,request,200)
 
 def do_paxos_broad(request):
 
     param = json.loads(request.body)
-    item = param.get('item')
-
+    item = str(param.get('item'))
+    if not str_equal(item ,key_paxos_leader):
+        print 'get broad msg ITEM %s VALUE %s BROADUUID %s' % (item,param.get('val'),param.get('broadUuid'))
+        print 'get broad msg PARAM %s' % (str(param))
     broadUuid = param.get('broadUuid')
     if not broadUuid:
         return jresponse('-1','broadUuid error',request,200)
@@ -51,6 +54,7 @@ def do_paxos_broad(request):
         if broadUuid == wsgiObj.itemBroadUuid.get(item,''):
             pass
         else:
+            print 'acceptor recv ITEM %s VALUE %s BROADUUID %s' % (item,val,broadUuid)
             wsgiObj.itemBroadUuid.put(item,broadUuid)
             wsgiObj.PAXOS_VALUE.put(item,val)
             acceptor_broadcast(item, val, broadUuid)

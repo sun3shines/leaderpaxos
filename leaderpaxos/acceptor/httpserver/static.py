@@ -28,7 +28,7 @@ class pywsgi:
         
         self.SIGNAL_BROAD_SEND = Mydict()
         
-        self.CACHE_SEND = Mydict()
+        self.CACHE_BROAD_SEND = Mydict()
         
         self.PAXOS_ACCEPTORS = []
         

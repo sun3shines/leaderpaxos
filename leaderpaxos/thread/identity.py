@@ -51,7 +51,7 @@ def proposer():
             signal_sleep(wsgiObj,leaderTerm)
 
 def leader():
-    print 'leader broad self info'
+    # print 'leader broad self info'
     item_proposer_broad(key_paxos_leader,wsgiObj.hostUuid,get_broad_uuid())
     signal_sleep(wsgiObj,wsgiObj.PAXOS_LEADER_TERM)
     

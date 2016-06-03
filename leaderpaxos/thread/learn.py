@@ -17,7 +17,7 @@ def item_proposer_learn(item):
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
         if hostUuid == wsgiObj.hostUuid:
             continue
-        wsgiObj.CACHE_SEND.put(hostUuid,{'item':item,
+        wsgiObj.CACHE_LEARN_SEND.put(hostUuid,{'item':item,
                                          'val':None})
         wsgiObj.SIGNAL_LEARN_SEND.get(hostUuid).put(0)
         
@@ -43,14 +43,14 @@ def item_learn_transmit(acceptorUuid,host,port,item):
     else:
         val = 'failed'
     
-    wsgiObj.CACHE_RECV.put(acceptorUuid,{'item':item,'val':val})
+    wsgiObj.CACHE_LEARN_RECV.put(acceptorUuid,{'item':item,'val':val})
     wsgiObj.SIGNAL_LEARN_RECV.put(acceptorUuid)
     
 def paxos_learn_base(acceptorUuid,host,port):
     
     while True:
         getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_SEND.get(acceptorUuid))
-        param = wsgiObj.CACHE_SEND.get(acceptorUuid)
+        param = wsgiObj.CACHE_LEARN_SEND.get(acceptorUuid)
         item = param.get('item')
         item_learn_transmit(acceptorUuid,host,port,item)
         
@@ -95,6 +95,6 @@ def paxos_decision():
     
     while True:
         acceptorUuid = getQueuItem(wsgiObj,wsgiObj.SIGNAL_LEARN_RECV)
-        param = wsgiObj.CACHE_RECV.get(acceptorUuid)
+        param = wsgiObj.CACHE_LEARN_RECV.get(acceptorUuid)
         item_decision(acceptorUuid,param)
         

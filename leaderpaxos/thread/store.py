@@ -39,7 +39,7 @@ def get_item():
     
     item = 0
     while True:
-        keyitem = str(item)
+        keyitem = 'LOGXX'+str(item)
         val = item_proposer_learn(keyitem)
         if not val:
             print 'learn %s as empty item' % (keyitem)
@@ -55,10 +55,8 @@ def paxos_item_store():
         for keyitem in get_item():
             if not started:
                 started = True
-                start_mst()
-            print 'item store thread item ',keyitem
+                do_start_mst().start()
             logUuid,logentry = getQueuItem(wsgiObj, wsgiObj.store_param)
-            print 'item store thread entry',logentry
             item_proposer_broad(keyitem, logentry, get_broad_uuids())
             wsgiObj.store_resut.put((logUuid,0))
 
