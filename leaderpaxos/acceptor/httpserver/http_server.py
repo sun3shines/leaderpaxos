@@ -31,12 +31,15 @@ def do_paxos_broad(request):
 
     param = json.loads(request.body)
     item = param.get('item')
-    
+
+    broadUuid = param.get('broadUuid')
+    if not broadUuid:
+        return jresponse('-1','broadUuid error',request,200)
+
     if str_equal(item ,key_paxos_leader):
         
         leaderUuid = param.get('val')
         leaderTime = time.time()
-        broadUuid = param.get('broadUuid')
         if broadUuid == wsgiObj.broadUuid:
             pass
         else:
@@ -44,9 +47,7 @@ def do_paxos_broad(request):
             wsgiObj.PAXOS_QUEUE.put((item,val))
             acceptor_broadcast(item, leaderUuid, broadUuid)
     else:
-        item = param.get('item')
         val = param.get('val')
-        broadUuid = param.get('broadUuid')
         if broadUuid == wsgiObj.itemBroadUuid.get(item,''):
             pass
         else:

@@ -61,6 +61,6 @@ def test():
 
 if __name__ == '__main__':
     paxos_alive('127.0.0.1',10011,'')
-    print paxos_learn('127.0.0.1',19011,key_paxos_leader)
-    print paxos_broad('127.0.0.1',19011,key_paxos_leader,'nSwfsePF-0GHDbc-KJcV')
+    print paxos_learn('127.0.0.1',19011,'1')
+#    print paxos_broad('127.0.0.1',19011,key_paxos_leader,'nSwfsePF-0GHDbc-KJcV')
     

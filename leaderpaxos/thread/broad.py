@@ -6,6 +6,7 @@ from leaderpaxos.share.signal import getQueuItem
 
 def item_proposer_broad(item,val,broadUuid):
     
+    print 'leader broad %s %s %s' % (item,val,broadUuid)
     for hostUuid,_,_ in wsgiObj.PAXOS_ACCEPTORS:
         if hostUuid == wsgiObj.hostUuid:
             continue
