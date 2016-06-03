@@ -26,12 +26,10 @@ def paxos_acceptor_main():
         if str_equal(key ,key_paxos_leader):
             leaderUuid,leaderTime,broadUuid = val
             wsgiObj.broadUuid = broadUuid
-            # print 'get info %s %s' % (key_paxos_leader,leaderUuid)
             start_time = leaderTime
             wsgiObj.PAXOS_VALUE.put(key_paxos_leader,val)
             threading.Timer(wsgiObj.PAXOS_LEADER_TERM,paxos_timer_acceptor,[start_time]).start()
         else:
-            # print 'get info %s' % (key)
             pass
             
 def paxos_acceptor_broadcast(acceptorUuid,host,port):

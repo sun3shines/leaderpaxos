@@ -24,31 +24,35 @@ def do_paxos_learn(request):
             leaderTerm = wsgiObj.PAXOS_LEADER_TERM - (time.time()-leaderTime)
             msgval = json.dumps((leaderUuid,leaderTerm,broadUuid))
     else:
-        msgval = ''
-    # print 'open learn msg %s ' % (msgval)    
+        msgval = wsgiObj.PAXOS_VALUE.get(item,'')
     return jresponse('0',msgval,request,200)
 
 def do_paxos_broad(request):
 
     param = json.loads(request.body)
     item = param.get('item')
-    broadUuid = param.get('broadUuid')
     
     if str_equal(item ,key_paxos_leader):
+        
         leaderUuid = param.get('val')
         leaderTime = time.time()
         broadUuid = param.get('broadUuid')
         if broadUuid == wsgiObj.broadUuid:
-            # print 'duplicated broad info'
             pass
         else:
             val = (leaderUuid,leaderTime,broadUuid)
             wsgiObj.PAXOS_QUEUE.put((item,val))
-            acceptor_broadcast(key_paxos_leader, leaderUuid, broadUuid)
+            acceptor_broadcast(item, leaderUuid, broadUuid)
     else:
         item = param.get('item')
         val = param.get('val')
         broadUuid = param.get('broadUuid')
-        
+        if broadUuid == wsgiObj.itemBroadUuid.get(item,''):
+            pass
+        else:
+            wsgiObj.itemBroadUuid.put(item,broadUuid)
+            wsgiObj.PAXOS_VALUE.put(item,val)
+            acceptor_broadcast(item, val, broadUuid)
+            
     return jresponse('0','',request,200)
 

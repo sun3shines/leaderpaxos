@@ -32,10 +32,10 @@ def get_item():
     item = 0
     while True:
         keyitem = str(item)
-        val = item_proposer_learn(item)
+        val = item_proposer_learn(keyitem)
         if not val:
-            print 'learn % as empty item'
-            yield item
+            print 'learn % as empty item' % (keyitem)
+            yield keyitem
         else:
             print 'learn item % data as %s' % (keyitem,val)
         item = item + 1    
@@ -43,8 +43,8 @@ def get_item():
 def paxos_item_store():
     
     while True:
-        logUuid,logentry = getQueuItem(wsgiObj, wsgiObj.store_param)
         keyitem = get_item()
+        logUuid,logentry = getQueuItem(wsgiObj, wsgiObj.store_param)
         item_proposer_broad(keyitem, logentry, get_broad_uuids())
         wsgiObj.store_resut.put((logUuid,0))
 
@@ -54,7 +54,7 @@ class do_paxos_store(threading.Thread):
         
     def run(self):
         try:
-            print 'start item store thread'
+            print 'item store thread start'
             paxos_item_store()
         except:
             print traceback.format_exc()

@@ -32,4 +32,6 @@ class pywsgi:
         
         self.PAXOS_ACCEPTORS = []
         
+        self.itemBroadUuid = Mydict()
+        
 wsgiObj = pywsgi()
