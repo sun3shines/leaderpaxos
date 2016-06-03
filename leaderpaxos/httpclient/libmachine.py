@@ -41,7 +41,7 @@ class MstGet(Task):
     
 def key_set(host,port,key,val):
     t = KeySet(key,val)
-    mission.execute(t, host, port, 5)
+    mission.execute(t, host, port, 100)
     return t.response
 
 def mst_get(host,port):
@@ -50,7 +50,9 @@ def mst_get(host,port):
     return t.response
 
 def key_store(host,port,cmd,key,val):
-    pass
+    t = KeyStore(cmd,key,val)
+    mission.execute(t, host, port, 50)
+    return t.response
 
 if __name__ == '__main__':
     host = '127.0.0.1'

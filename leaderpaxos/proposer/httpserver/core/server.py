@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import with_statement
-
+import traceback
 from eventlet import Timeout
 from leaderpaxos.webobx import Request, Response
 from leaderpaxos.proposer.httpserver.route import process_request
@@ -18,6 +18,7 @@ class ServerController(object):
             resp = process_request(request) 
         except (Exception, Timeout):
             print 'ERROR __call__ error with %s %s ' % (request.method,request.path)
+            print traceback.format_exc()
             resp = Response() 
                 
         return resp(env, start_response)
