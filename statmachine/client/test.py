@@ -20,7 +20,7 @@ def get_logs():
 if __name__ == '__main__':
     import pdb;pdb.set_trace()
     host = '127.0.0.1'
-    port = 18011    
+    port = 18000   
     for c,key,val in  get_logs():
         resp = key_set(host, port, key, val)
         if '0' != resp.get('status'):

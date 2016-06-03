@@ -10,9 +10,7 @@ class pywsgi:
         self.WSGI_SECT = 'server' 
         self.WSGI_HOST = None 
         self.WSGI_PORT = None 
-        
-        self.hostUuid = None        
-        
+            
         self.interruptEvent = threading.Event()
 
         self.MACHINE_STATE = Mydict()

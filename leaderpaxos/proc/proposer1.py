@@ -17,7 +17,7 @@ mst_cmds = ['python machine1.py',
 
 proc_index = 0
 @proposer_iduuid(proc_index,*paxos_hosts[proc_index],hosts=paxos_hosts,
-                 acceptors=paxos_acceptors,mst_cmds[proc_index])
+                 acceptors=paxos_acceptors,mst_cmd=mst_cmds[proc_index])
 
 def pstart(*args,**kwargs):
     proposer_load()

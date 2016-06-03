@@ -9,8 +9,9 @@ from leaderpaxos.proposer.httpserver.static import wsgiObj
 from leaderpaxos.share.uuid import get_vs_uuid as get_broad_uuids
 from leaderpaxos.share.signal import getQueuItem,signal_sleep
 
-def start_machine():
+def start_mst():
       
+    print 'statmachine process start'
     p = subprocess.Popen(wsgiObj.mst_cmd, shell=True, cwd=wsgiObj.mst_cwd)
     p.wait()  
     print 'statmachine process stop' 
@@ -49,8 +50,12 @@ def get_item():
     
 def paxos_item_store():
 
+    started = False
     while True:
         for keyitem in get_item():
+            if not started:
+                started = True
+                start_mst()
             logUuid,logentry = getQueuItem(wsgiObj, wsgiObj.store_param)
             item_proposer_broad(keyitem, logentry, get_broad_uuids())
             wsgiObj.store_resut.put((logUuid,0))
